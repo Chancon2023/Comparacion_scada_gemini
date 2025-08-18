@@ -3,18 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparador de Sistemas SCADA</title>
+    <title>Dashboard Comparativo de Sistemas SCADA</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Comparador Interactivo de Sistemas SCADA</h1>
-        <p>Selecciona los sistemas SCADA que deseas comparar:</p>
-        <div id="scada-selectors">
+        <header>
+            <h1>Dashboard Comparativo de Sistemas SCADA</h1>
+            <nav>
+                <button id="btn-compare" class="nav-btn active">Tabla Comparativa</button>
+                <button id="btn-pros-cons" class="nav-btn">Pros, Contras y Normativa</button>
+                <button id="btn-ranking" class="nav-btn">Ranking de Características</button>
+            </nav>
+        </header>
+
+        <main>
+            <div id="compare-view" class="view active">
+                <h2>Comparación Detallada</h2>
+                <p>Selecciona los sistemas SCADA que deseas comparar en la tabla:</p>
+                <div id="scada-selectors"></div>
+                <button id="generate-table-btn">Generar Tabla</button>
+                <div id="comparison-table-container"></div>
             </div>
-        <button id="compare-btn">Comparar</button>
-        <div id="comparison-table-container">
+
+            <div id="pros-cons-view" class="view">
+                <h2>Pros, Contras y Cumplimiento Normativo (NTSyCS)</h2>
+                <div id="pros-cons-container"></div>
             </div>
+
+            <div id="ranking-view" class="view">
+                <h2>Ranking Basado en Características Clave</h2>
+                <p class="disclaimer">Este ranking se basa en un puntaje simplificado derivado de la información del documento. Un puntaje más alto indica una mayor cantidad de características positivas mencionadas.</p>
+                <div id="ranking-chart-container"></div>
+            </div>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>
