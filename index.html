@@ -3,40 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Comparativo de Sistemas SCADA</title>
+    <title>Análisis Avanzado de Sistemas SCADA</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Dashboard Comparativo de Sistemas SCADA</h1>
-            <nav>
-                <button id="btn-compare" class="nav-btn active">Tabla Comparativa</button>
-                <button id="btn-pros-cons" class="nav-btn">Pros, Contras y Normativa</button>
-                <button id="btn-ranking" class="nav-btn">Ranking de Características</button>
-            </nav>
+            <h1>Análisis Avanzado de Sistemas SCADA ⚡</h1>
+            <p class="subtitle">Una herramienta interactiva para la comparación visual y el análisis de puntos críticos.</p>
         </header>
 
         <main>
-            <div id="compare-view" class="view active">
-                <h2>Comparación Detallada</h2>
-                <p>Selecciona los sistemas SCADA que deseas comparar en la tabla:</p>
-                <div id="scada-selectors"></div>
-                <button id="generate-table-btn">Generar Tabla</button>
-                <div id="comparison-table-container"></div>
-            </div>
+            <section class="card">
+                <h2>📊 Comparador Visual Dinámico</h2>
+                <p>Selecciona los sistemas SCADA que deseas comparar. El gráfico de araña se actualizará en tiempo real.</p>
+                <div id="scada-selectors">
+                    </div>
+                <div class="chart-container">
+                    <canvas id="scada-radar-chart"></canvas>
+                </div>
+            </section>
 
-            <div id="pros-cons-view" class="view">
-                <h2>Pros, Contras y Cumplimiento Normativo (NTSyCS)</h2>
-                <div id="pros-cons-container"></div>
-            </div>
-
-            <div id="ranking-view" class="view">
-                <h2>Ranking Basado en Características Clave</h2>
-                <p class="disclaimer">Este ranking se basa en un puntaje simplificado derivado de la información del documento. Un puntaje más alto indica una mayor cantidad de características positivas mencionadas.</p>
-                <div id="ranking-chart-container"></div>
-            </div>
+            <section class="card">
+                <h2>🚩 Red Flags y Puntos Críticos</h2>
+                <p>Análisis de las debilidades y problemas reportados en el documento para cada sistema.</p>
+                <div id="red-flags-container">
+                    </div>
+            </section>
         </main>
+
+        <footer>
+            <p>Dashboard diseñado para un análisis profundo y toma de decisiones.</p>
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>
