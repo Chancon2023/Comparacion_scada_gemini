@@ -1,0 +1,1 @@
+# Comparacion_scada_gemini
