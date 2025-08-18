@@ -3,39 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis Avanzado de Sistemas SCADA</title>
+    <title>Análisis Definitivo de Sistemas SCADA</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Análisis Avanzado de Sistemas SCADA ⚡</h1>
-            <p class="subtitle">Una herramienta interactiva para la comparación visual y el análisis de puntos críticos.</p>
+            <h1>Análisis Definitivo de Sistemas SCADA 🚀</h1>
+            <p class="subtitle">La herramienta todo-en-uno para una evaluación completa basada en la documentación.</p>
         </header>
 
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="tab-table">📄 Tabla Comparativa</button>
+            <button class="tab-btn" data-tab="tab-dashboard">📊 Dashboard Visual</button>
+            <button class="tab-btn" data-tab="tab-ranking">🏆 Ranking y Análisis</button>
+        </nav>
+
         <main>
-            <section class="card">
-                <h2>📊 Comparador Visual Dinámico</h2>
-                <p>Selecciona los sistemas SCADA que deseas comparar. El gráfico de araña se actualizará en tiempo real.</p>
-                <div id="scada-selectors">
-                    </div>
-                <div class="chart-container">
-                    <canvas id="scada-radar-chart"></canvas>
+            <div id="tab-table" class="tab-content active">
+                <div class="card">
+                    <h2>Tabla Comparativa Detallada</h2>
+                    <p>Visualización completa de todos los criterios y sistemas SCADA descritos en el documento.</p>
+                    <div class="table-container" id="full-comparison-table">
+                        </div>
                 </div>
-            </section>
+            </div>
 
-            <section class="card">
-                <h2>🚩 Red Flags y Puntos Críticos</h2>
-                <p>Análisis de las debilidades y problemas reportados en el documento para cada sistema.</p>
-                <div id="red-flags-container">
+            <div id="tab-dashboard" class="tab-content">
+                <div class="card">
+                    <h2>Comparador Visual Dinámico (Gráfico de Araña)</h2>
+                    <p>Selecciona los sistemas que deseas comparar visualmente. El gráfico se actualizará en tiempo real.</p>
+                    <div id="scada-selectors-chart"></div>
+                    <div class="chart-container">
+                        <canvas id="scada-radar-chart"></canvas>
                     </div>
-            </section>
-        </main>
+                </div>
+            </div>
 
-        <footer>
-            <p>Dashboard diseñado para un análisis profundo y toma de decisiones.</p>
-        </footer>
+            <div id="tab-ranking" class="tab-content">
+                <div class="card">
+                    <h2>Ranking Basado en Evidencia</h2>
+                    <p>Clasificación de los sistemas SCADA según los "Pros" y "Contras" identificados en los comentarios del documento.</p>
+                    <div id="ranking-container"></div>
+                </div>
+                <div class="card">
+                    <h2>✅ Pros y ❌ Contras por Sistema</h2>
+                    <p>Análisis detallado de los puntos fuertes y débiles de cada SCADA, extraídos directamente de la columna "Comentarios".</p>
+                    <div id="pros-cons-container"></div>
+                </div>
+            </div>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>
