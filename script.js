@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    // --- DATOS DEL CSV ---
     const scadaData = [
         {
             "CRITERIO": "--- Diseño de Arquitectura ---",
@@ -9,9 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
             "EPAS Gateway Schneider": "El sistema utiliza la herramienta WebGAT para la administración, que proporciona una interfaz de usuario amigable y permite una gestión eficiente del sistema. La interfaz de usuario incluye menús organizados y descripciones detalladas de los LEDs, así como opciones de configuración y ajuste.\n\nAmigable para el desarrollo de pantallas HMI locales.",
             "ZEE600 ABB (Zenon)": "Terminal Server Client (RDP).\nzenon Webclient.\nHTML5 Client.\nInterfaz HMI/SCADA avanzada: Visualización en tiempo real, control y análisis de datos.\nMulti-touch: Proyectos con pantallas de multitáctil​​​​."
         },
-        // ... (rest of the data from the CSV)
-        // NOTE: I've truncated the data here for brevity, but you should include all rows from your CSV.
-        // I will add a few more rows for a complete example.
         {
             "CRITERIO": "Arquitectura",
             "EcoStruxure™ Grid Operation ADMS Schenider": "- Arquitectura Ethernet Conmutada\n- Arquitectura Ethernet Segregada\n- Protocolos de Redundancia (HSR y PRP)",
@@ -22,70 +21,154 @@ document.addEventListener('DOMContentLoaded', function() {
             "ZEE600 ABB (Zenon)": "Arquitectura Soportada:\nCliente-Servidor.\nArquitectura Redundante.\nDistribuida."
         },
         {
-            "CRITERIO": "Redundancia",
-            "EcoStruxure™ Grid Operation ADMS Schenider": "- Redundancia de Servidores\n- Redundancia de Datos.\n- Redundancia de Protocolos de Comunicación",
-            "Zenon COPADATA": "Modos de Redundancia:\nModo Dominante, No Dominante y Clasificado.\nRedundancia de Comunicaciones (HSR y PRP).",
-            "MicroScada X HITACHI ENERGY": "Redundancia de Comunicación: Soporte para PRP y HSR.\nRedundancia de Servidores.",
-            "Power Operation Schneider": "Redundancia del Servidor: Servidores primarios y de respaldo sincronizados.\nRedundancia de Red Ethernet.",
-            "EPAS Gateway Schneider": "Soporta configuraciones de redundancia en hardware y software, ofreciendo alta disponibilidad.",
-            "ZEE600 ABB (Zenon)": "Modos de Redundancia: Dominante, No Dominante, Clasificado.\nRedundancia de Comunicaciones (HSR y PRP)."
+            "CRITERIO": "Comentarios sobre Redundancia",
+            "EcoStruxure™ Grid Operation ADMS Schenider": "A comprobar funcionalidad de redundancia",
+            "Zenon COPADATA": "Implementación exitosa en clientes mineros.",
+            "MicroScada X HITACHI ENERGY": "La redundancia funciona de forma correcta mediante Shadowing.",
+            "Power Operation Schneider": "La redundancia no funciona, no se logra configurar, fabrica envía parches de los cuales ninguno funciona.",
+            "EPAS Gateway Schneider": "No posee protocolos de redundancia HSR o PRP.",
+            "ZEE600 ABB (Zenon)": "Implementación exitosa."
         }
+        // ... (DEBES AGREGAR EL RESTO DE TUS DATOS DEL CSV AQUÍ)
     ];
+    
+    // --- NAVEGACIÓN Y VISTAS ---
+    const views = document.querySelectorAll('.view');
+    const navButtons = document.querySelectorAll('.nav-btn');
 
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Manejar el estado activo del botón
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Mostrar la vista correspondiente
+            const targetViewId = button.id.replace('btn-', '') + '-view';
+            views.forEach(view => {
+                view.classList.remove('active');
+                if (view.id === targetViewId) {
+                    view.classList.add('active');
+                }
+            });
+        });
+    });
+
+    // --- LÓGICA PARA CADA VISTA ---
     const scadaSystems = Object.keys(scadaData[0]).filter(key => key !== 'CRITERIO');
+
+    // VISTA 1: TABLA COMPARATIVA
     const selectorsContainer = document.getElementById('scada-selectors');
-    const compareBtn = document.getElementById('compare-btn');
+    const generateTableBtn = document.getElementById('generate-table-btn');
     const tableContainer = document.getElementById('comparison-table-container');
 
-    // Create checkboxes for each SCADA system
     scadaSystems.forEach(system => {
         const label = document.createElement('label');
         label.className = 'selector-label';
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = system;
-        checkbox.checked = true; // Default to checked
+        checkbox.checked = true;
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(system));
         selectorsContainer.appendChild(label);
     });
 
-    // Function to generate and display the comparison table
-    function generateTable() {
+    function generateComparisonTable() {
         const selectedSystems = Array.from(document.querySelectorAll('#scada-selectors input:checked')).map(cb => cb.value);
-
         if (selectedSystems.length === 0) {
-            tableContainer.innerHTML = '<p>Por favor, selecciona al menos un sistema SCADA para comparar.</p>';
+            tableContainer.innerHTML = '<p>Por favor, selecciona al menos un sistema SCADA.</p>';
             return;
         }
-
-        let tableHTML = '<table>';
-        // Table Header
-        tableHTML += '<thead><tr><th>CRITERIO</th>';
-        selectedSystems.forEach(system => {
-            tableHTML += `<th>${system}</th>`;
-        });
-        tableHTML += '</tr></thead>';
-
-        // Table Body
-        tableHTML += '<tbody>';
+        let tableHTML = '<table><thead><tr><th>CRITERIO</th>';
+        selectedSystems.forEach(system => tableHTML += `<th>${system}</th>`);
+        tableHTML += '</tr></thead><tbody>';
         scadaData.forEach(row => {
-            tableHTML += '<tr>';
-            tableHTML += `<td><strong>${row.CRITERIO}</strong></td>`;
+            tableHTML += `<tr><td><strong>${row.CRITERIO}</strong></td>`;
             selectedSystems.forEach(system => {
-                // Replace newlines with <br> for HTML display
                 const cellContent = row[system] ? row[system].replace(/\n/g, '<br>') : 'N/A';
                 tableHTML += `<td>${cellContent}</td>`;
             });
             tableHTML += '</tr>';
         });
         tableHTML += '</tbody></table>';
-
         tableContainer.innerHTML = tableHTML;
     }
+    generateTableBtn.addEventListener('click', generateComparisonTable);
+    
 
-    compareBtn.addEventListener('click', generateTable);
+    // VISTA 2: PROS Y CONTRAS
+    const prosConsContainer = document.getElementById('pros-cons-container');
 
-    // Initial table generation on page load
-    generateTable();
+    function generateProsCons() {
+        // Análisis simplificado de texto para pros y contras
+        const analysis = {
+            "EcoStruxure™ Grid Operation ADMS Schenider": { pros: ["Interfaz Unificada", "Móvil en tiempo real", "Protocolos HSR y PRP"], cons: ["Funcionalidad de redundancia a comprobar"] },
+            "Zenon COPADATA": { pros: ["Cliente HTML5", "Multi-touch", "Implementación exitosa de redundancia"], cons: [] },
+            "MicroScada X HITACHI ENERGY": { pros: ["Interfaz Web", "Aplicaciones Móviles", "Redundancia funciona correctamente"], cons: [] },
+            "Power Operation Schneider": { pros: ["Cliente Web HTML5"], cons: ["La redundancia NO funciona", "No se logra configurar"] },
+            "EPAS Gateway Schneider": { pros: ["Interfaz amigable", "Modular y escalable"], cons: ["No posee HSR o PRP"] },
+            "ZEE600 ABB (Zenon)": { pros: ["Cliente HTML5", "Implementación exitosa"], cons: [] }
+        };
+
+        let cardsHTML = '';
+        scadaSystems.forEach(system => {
+            const pros = analysis[system].pros.map(p => `<li>${p}</li>`).join('');
+            const cons = analysis[system].cons.map(c => `<li>${c}</li>`).join('');
+            
+            cardsHTML += `
+                <div class="scada-card">
+                    <h3>${system}</h3>
+                    <div class="pros"><strong>Pros:</strong> <ul>${pros || "<li>No especificados</li>"}</ul></div>
+                    <div class="cons"><strong>Contras:</strong> <ul>${cons || "<li>No especificados</li>"}</ul></div>
+                    <div class="normativa">
+                        <strong>Cumplimiento NTSyCS Chile:</strong>
+                        <p>No se encontró documentación pública que confirme el cumplimiento directo. La certificación bajo NTSyCS generalmente depende de la arquitectura y configuración final del proyecto. Se recomienda consultar directamente al proveedor.</p>
+                    </div>
+                </div>
+            `;
+        });
+        prosConsContainer.innerHTML = cardsHTML;
+    }
+
+    // VISTA 3: RANKING
+    const rankingChartContainer = document.getElementById('ranking-chart-container');
+    
+    function generateRanking() {
+        const scores = scadaSystems.map(system => {
+            let score = 0;
+            // Definir reglas de puntuación simples
+            const positiveKeywords = /éxito|funciona de forma correcta|amigable|escalable|html5|móvil|hsr|prp/gi;
+            const negativeKeywords = /no funciona|no se logra configurar|deficiente|poca informacion|no posee/gi;
+            
+            scadaData.forEach(row => {
+                const text = row[system] || "";
+                score += (text.match(positiveKeywords) || []).length;
+                score -= (text.match(negativeKeywords) || []).length * 2; // Penalizar más los negativos
+            });
+            return { system, score };
+        });
+
+        scores.sort((a, b) => b.score - a.score);
+        const maxScore = Math.max(...scores.map(s => s.score), 1);
+
+        let chartHTML = '';
+        scores.forEach(({ system, score }) => {
+            const barWidth = (score / maxScore) * 100;
+            chartHTML += `
+                <div class="chart-bar-container">
+                    <div class="chart-label">${system}</div>
+                    <div class="chart-bar" style="width: ${barWidth}%;">
+                        ${score}
+                    </div>
+                </div>
+            `;
+        });
+        rankingChartContainer.innerHTML = chartHTML;
+    }
+
+    // --- INICIALIZACIÓN ---
+    // Generar contenido de todas las vistas al cargar
+    generateComparisonTable();
+    generateProsCons();
+    generateRanking();
 });
