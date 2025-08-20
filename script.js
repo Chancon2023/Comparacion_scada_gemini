@@ -51,13 +51,72 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // --- LÓGICA DE NAVEGACIÓN ---
-    // (Sin cambios, se omite por brevedad)
+    const navLinks = document.querySelectorAll('.nav-link');
+    const pages = document.querySelectorAll('.page');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            navLinks.forEach(n => n.classList.remove('active'));
+            link.classList.add('active');
+        });
+    });
 
-    // --- PÁGINA: MATRIZ ---
-    // (Sin cambios, se omite por brevedad)
+    // --- PÁGINA: MATRIZ (Lógica completa) ---
+    function initMatrix() {
+        const matrixTable = document.getElementById('comparison-matrix');
+        const filterContainer = document.getElementById('scada-filter-container');
+        matrixTable.innerHTML = ''; filterContainer.innerHTML = '';
+        let headerRow = '<tr><th>Criterio</th>';
+        scadaData.forEach(scada => {
+            headerRow += `<th data-scada-id="${scada.id}">${scada.name}</th>`;
+            filterContainer.innerHTML += `<label class="checkbox-wrapper"><input type="checkbox" class="scada-filter-cb" value="${scada.id}" checked> ${scada.name}</label>`;
+        });
+        headerRow += '</tr>';
+        let bodyHtml = '';
+        Object.keys(features).forEach(featureKey => {
+            bodyHtml += `<tr data-feature-key="${featureKey}"><td>${features[featureKey]}</td>`;
+            scadaData.forEach(scada => {
+                const score = scada.scores[featureKey] || 0;
+                bodyHtml += `<td class="score-cell score-${score}" data-scada-id="${scada.id}">${score}/5</td>`;
+            });
+            bodyHtml += '</tr>';
+        });
+        matrixTable.innerHTML = `<thead>${headerRow}</thead><tbody>${bodyHtml}</tbody>`;
+        
+        document.querySelectorAll('.scada-filter-cb').forEach(cb => cb.addEventListener('change', updateMatrixVisibility));
+        document.querySelectorAll('#comparison-matrix tbody tr').forEach(row => row.addEventListener('click', () => {
+             document.querySelectorAll('#comparison-matrix tbody tr').forEach(r => r.classList.remove('selected'));
+             row.classList.add('selected');
+             updateFeaturesSidebar(row.getAttribute('data-feature-key'));
+        }));
+    }
+
+    function updateMatrixVisibility() {
+        const visibleScadaIds = Array.from(document.querySelectorAll('.scada-filter-cb:checked')).map(cb => cb.value);
+        document.querySelectorAll('#comparison-matrix th, #comparison-matrix td').forEach(cell => {
+            const scadaId = cell.getAttribute('data-scada-id');
+            if (scadaId) cell.style.display = visibleScadaIds.includes(scadaId) ? '' : 'none';
+        });
+        const selectedRow = document.querySelector('#comparison-matrix tbody tr.selected');
+        if(selectedRow) updateFeaturesSidebar(selectedRow.getAttribute('data-feature-key'));
+    }
+
+    function updateFeaturesSidebar(featureKey) {
+        const contentEl = document.getElementById('features-content');
+        if (!featureKey) { contentEl.innerHTML = '<p>Selecciona una fila para ver detalles.</p>'; return; }
+        let content = `<h3><span class="accent">//</span> ${features[featureKey]}</h3>`;
+        const visibleScadaIds = Array.from(document.querySelectorAll('.scada-filter-cb:checked')).map(cb => cb.value);
+        scadaData.filter(s => visibleScadaIds.includes(s.id)).forEach(scada => {
+            content += `<h4>${scada.name}</h4><p>Puntuación: ${scada.scores[featureKey]}/5. (Aquí iría el detalle textual del CSV si estuviera procesado)</p>`;
+        });
+        contentEl.innerHTML = content;
+    }
 
     // --- PÁGINA: ANÁLISIS DETALLADO ---
-    let radarChart;
+    let radarChart = null; // Declarar la variable del gráfico globalmente en este scope
     const radarSystemsSelector = document.getElementById('radar-systems-selector');
     const criteriaCheckboxesContainer = document.getElementById('criteria-checkboxes');
     const radarColors = ['rgba(0, 255, 127, 0.4)', 'rgba(0, 191, 255, 0.4)', 'rgba(255, 215, 0, 0.4)'];
@@ -69,40 +128,42 @@ document.addEventListener('DOMContentLoaded', function () {
             criteriaCheckboxesContainer.innerHTML += `<label><input type="checkbox" class="criteria-cb" value="${key}" checked> ${features[key]}</label>`;
         });
         
-        const ctx = document.getElementById('radar-chart').getContext('2d');
-        radarChart = new Chart(ctx, { /* Opciones del gráfico... */ });
-        
         radarSystemsSelector.addEventListener('change', updateAnalisisPage);
         document.querySelectorAll('.criteria-cb').forEach(cb => cb.addEventListener('change', updateAnalisisPage));
         
-        // Seleccionar Zenon por defecto
-        radarSystemsSelector.options[0].selected = true;
-        updateAnalisisPage();
+        radarSystemsSelector.options[0].selected = true; // Seleccionar el primero por defecto
+        updateAnalisisPage(); // Llamada inicial para dibujar el gráfico y la ficha
     }
 
     function updateAnalisisPage() {
-        const selectedSystemIds = Array.from(radarSystemsSelector.selectedOptions).map(opt => opt.value).slice(0, 3); // Limitar a 3
+        const selectedSystemIds = Array.from(radarSystemsSelector.selectedOptions).map(opt => opt.value).slice(0, 3);
         const selectedCriteriaKeys = Array.from(document.querySelectorAll('.criteria-cb:checked')).map(cb => cb.value);
         
         updateRadarChart(selectedSystemIds, selectedCriteriaKeys);
         
         if (selectedSystemIds.length > 0) {
-            updateFichaTecnica(selectedSystemIds[0]); // La ficha muestra el primer seleccionado
+            updateFichaTecnica(selectedSystemIds[0]);
         } else {
-            document.getElementById('ficha-tecnica').innerHTML = '<p>Selecciona un sistema para ver su ficha técnica.</p>';
+            document.getElementById('ficha-tecnica').innerHTML = '<p style="text-align: center; padding: 2rem;">Selecciona un sistema para ver su ficha técnica.</p>';
         }
     }
     
     function updateRadarChart(systemIds, criteriaKeys) {
-        if (!radarChart || systemIds.length === 0 || criteriaKeys.length === 0) {
-             if (radarChart) radarChart.clear();
-             return;
+        const ctx = document.getElementById('radar-chart').getContext('2d');
+
+        // **LA CORRECCIÓN CLAVE ESTÁ AQUÍ**
+        // Destruir la instancia anterior del gráfico si existe
+        if (radarChart) {
+            radarChart.destroy();
+        }
+
+        if (systemIds.length === 0 || criteriaKeys.length === 0) {
+            return; // No dibujar nada si no hay selecciones
         }
 
         const filteredData = scadaData.filter(s => systemIds.includes(s.id));
         
-        radarChart.data.labels = criteriaKeys.map(key => features[key]);
-        radarChart.data.datasets = filteredData.map((scada, index) => ({
+        const datasets = filteredData.map((scada, index) => ({
             label: scada.name,
             data: criteriaKeys.map(key => scada.scores[key]),
             backgroundColor: radarColors[index],
@@ -110,7 +171,36 @@ document.addEventListener('DOMContentLoaded', function () {
             borderWidth: 2,
             pointBackgroundColor: radarBorderColors[index]
         }));
-        radarChart.update();
+
+        // Crear una nueva instancia del gráfico
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: criteriaKeys.map(key => features[key]),
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { color: '#FFF', font: { size: 14 } } }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        pointLabels: { color: '#FFF', font: { size: 12 } },
+                        suggestedMin: 0,
+                        suggestedMax: 5,
+                        ticks: {
+                            backdropColor: 'transparent',
+                            color: '#FFF',
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
     }
     
     function updateFichaTecnica(scadaId) {
@@ -136,63 +226,19 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
-    // --- PÁGINA: RANKING Y PDF ---
-    // (Sin cambios, se omite por brevedad)
+    // --- PÁGINA: RANKING ---
+    document.getElementById('export-pdf-btn').addEventListener('click', () => {
+        const element = document.getElementById('conclusion-content');
+        const opt = {
+            margin: 1, filename: 'Veredicto_SCADA.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, backgroundColor: '#1A1A1A', useCORS: true },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    });
 
     // --- INICIALIZACIÓN GENERAL ---
-    function initialize() {
-        // Lógica de navegación
-        const navLinks = document.querySelectorAll('.nav-link');
-        const pages = document.querySelectorAll('.page');
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const pageId = link.getAttribute('data-page');
-                pages.forEach(p => p.classList.remove('active'));
-                document.getElementById(pageId).classList.add('active');
-                navLinks.forEach(n => n.classList.remove('active'));
-                link.classList.add('active');
-            });
-        });
-
-        // Lógica de la Matriz (re-incluida para completitud)
-        const matrixTable = document.getElementById('comparison-matrix');
-        const filterContainer = document.getElementById('scada-filter-container');
-        matrixTable.innerHTML = ''; filterContainer.innerHTML = '';
-        let headerRow = '<tr><th>Criterio</th>';
-        scadaData.forEach(scada => {
-            headerRow += `<th data-scada-id="${scada.id}">${scada.name}</th>`;
-            filterContainer.innerHTML += `<label class="checkbox-wrapper"><input type="checkbox" class="scada-filter-cb" value="${scada.id}" checked> ${scada.name}</label>`;
-        });
-        headerRow += '</tr>';
-        let bodyHtml = '';
-        Object.keys(features).forEach(featureKey => {
-            bodyHtml += `<tr data-feature-key="${featureKey}"><td>${features[featureKey]}</td>`;
-            scadaData.forEach(scada => {
-                const score = scada.scores[featureKey] || 0;
-                bodyHtml += `<td class="score-cell score-${score}" data-scada-id="${scada.id}">${score}/5</td>`;
-            });
-            bodyHtml += '</tr>';
-        });
-        matrixTable.innerHTML = `<thead>${headerRow}</thead><tbody>${bodyHtml}</tbody>`;
-        document.querySelectorAll('.scada-filter-cb').forEach(cb => cb.addEventListener('change', updateMatrixVisibility));
-        document.querySelectorAll('#comparison-matrix tbody tr').forEach(row => row.addEventListener('click', () => {
-             document.querySelectorAll('#comparison-matrix tbody tr').forEach(r => r.classList.remove('selected'));
-             row.classList.add('selected');
-             // Lógica de sidebar aquí
-        }));
-        
-        // Lógica de PDF
-        document.getElementById('export-pdf-btn').addEventListener('click', () => {
-             const element = document.getElementById('conclusion-content');
-             html2pdf().set({margin: 1, filename: 'Veredicto_SCADA.pdf'}).from(element).save();
-        });
-        
-        initAnalisis(); // Inicializa la página de análisis
-    }
-    
-    function updateMatrixVisibility(){ /* ... */ } // Placeholder para brevedad
-    
-    initialize();
+    initMatrix();
+    initAnalisis();
 });
-
