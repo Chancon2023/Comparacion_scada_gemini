@@ -3,90 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCADA Dashboard // Command Center</title>
+    <title>SCADA Command Center // Elite Analysis</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header class="hero animated">
-            <div class="hero-content">
-                <h1>SCADA Command Center</h1>
-                <p class="subtitle">Análisis de plataformas para operaciones de alto rendimiento.</p>
-                <a href="#dashboard-interactivo" class="cta-button">Acceder al Dashboard</a>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>SCADA<span>//CC</span></h2>
             </div>
-        </header>
+            <ul>
+                <li><a href="#inicio" class="nav-link active" data-page="inicio"><span>INICIO</span></a></li>
+                <li><a href="#graficos" class="nav-link" data-page="graficos"><span>GRÁFICOS</span></a></li>
+                <li><a href="#ranking" class="nav-link" data-page="ranking"><span>RANKING</span></a></li>
+            </ul>
+        </nav>
 
-        <main>
-            <section id="dashboard-interactivo" class="card-section animated">
-                <h2 class="section-title"><span>//</span> Dashboard Interactivo 📊</h2>
-                <div class="dashboard-controls">
-                    <label for="metric-selector">Métrica de Combate:</label>
-                    <select id="metric-selector">
-                        <option value="adaptacion" selected>Adaptación a Minería</option>
-                        <option value="escalabilidad">Escalabilidad</option>
-                        <option value="implementacion">Velocidad de Implementación</option>
-                        <option value="costo">Costo Total (TCO)</option>
-                        <option value="integracion">Poder de Integración</option>
-                    </select>
+        <main class="main-content">
+            <div id="inicio" class="page active">
+                <header class="page-header">
+                    <h1>Matriz Comparativa</h1>
+                    <p>Filtra sistemas y selecciona criterios para un análisis detallado.</p>
+                </header>
+                <div class="filter-controls" id="scada-filter-container">
+                    </div>
+                <div class="matrix-container">
+                    <div class="matrix-table-wrapper">
+                        <table id="comparison-matrix">
+                            </table>
+                    </div>
+                    <aside class="features-sidebar" id="features-sidebar">
+                        <h3><span class="accent">//</span> Características</h3>
+                        <div id="features-content">
+                            <p>Selecciona una fila en la matriz para ver detalles.</p>
+                        </div>
+                    </aside>
                 </div>
-                <div class="chart-container">
-                    <canvas id="scada-comparison-chart"></canvas>
-                </div>
-            </section>
+            </div>
 
-            <section id="reseñas" class="animated">
-                <h2 class="section-title"><span>//</span> Intel de Campo: Pros y Contras</h2>
-                <div class="reviews-grid">
-                    <article class="review-card">
-                        <div class="card-header">
-                            <h3>Zenon COPADATA</h3>
+            <div id="graficos" class="page">
+                <header class="page-header">
+                    <h1>Visualización de Datos</h1>
+                    <p>Compara el rendimiento de las plataformas de forma gráfica.</p>
+                </header>
+                <div class="charts-container">
+                    <div class="chart-wrapper">
+                        <h3><span class="accent">//</span> Comparativa por Característica</h3>
+                        <div class="chart-controls">
+                            <select id="bar-chart-systems" multiple></select>
+                            <select id="bar-chart-feature"></select>
                         </div>
-                        <div class="card-content">
-                            <h4><span class="pro-icon">+</span> Puntos Fuertes:</h4>
-                            <ul><li>Interfaz robusta para RDP.</li><li>Arquitectura redundante probada en minería.</li><li>Soporte nativo de protocolo PRP.</li><li>Escalabilidad top para Centros de Control.</li></ul>
-                            <h4><span class="con-icon">-</span> Debilidades:</h4>
-                            <p>Sin debilidades notables reportadas.</p>
+                        <canvas id="bar-chart"></canvas>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h3><span class="accent">//</span> Perfil de Rendimiento</h3>
+                        <div class="chart-controls">
+                            <select id="radar-chart-systems" multiple></select>
                         </div>
-                    </article>
-                    <article class="review-card">
-                        <div class="card-header">
-                            <h3>MicroScada X HITACHI</h3>
-                        </div>
-                        <div class="card-content">
-                            <h4><span class="pro-icon">+</span> Puntos Fuertes:</h4>
-                            <ul><li>HMI flexible con plantillas.</li><li>Redundancia sólida (Shadowing).</li><li>Implementado con éxito en C.C. de minería.</li></ul>
-                            <h4><span class="con-icon">-</span> Debilidades:</h4>
-                            <p>Sin debilidades notables reportadas.</p>
-                        </div>
-                    </article>
-                    <article class="review-card">
-                        <div class="card-header">
-                            <h3>Power Operation Schneider</h3>
-                        </div>
-                        <div class="card-content">
-                            <h4><span class="pro-icon">+</span> Puntos Fuertes:</h4>
-                            <p>No se reportaron ventajas claras.</p>
-                            <h4><span class="con-icon">-</span> Debilidades:</h4>
-                            <ul><li>Herramientas HMI deficientes.</li><li>Dependencia de software obsoleto (Excel 2016).</li><li>Fallas críticas en la configuración de redundancia.</li><li>Sistema inestable por exceso de logs.</li></ul>
-                        </div>
-                    </article>
+                        <canvas id="radar-chart"></canvas>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-             <section id="conclusion" class="card-section animated">
-                <h2 class="section-title"><span>//</span> Veredicto Final 🏆</h2>
-                <div class="conclusion-box">
-                    <p>
-                    Para el campo de batalla de la minería, <strong>Zenon Energy Edition (NCS)</strong> es el campeón indiscutible. Su plataforma unificada, bajo TCO y robustez general lo posicionan como la herramienta superior para un control total y sin fallos.
-                    </p>
+            <div id="ranking" class="page">
+                <header class="page-header">
+                    <h1>Ranking y Veredicto Final</h1>
+                    <p>Conclusión basada en el análisis de datos para operaciones mineras.</p>
+                </header>
+                <div class="ranking-container">
+                    <div id="conclusion-content">
+                        <h2><span class="accent">🏆</span> Campeón para Minería: Zenon Energy Edition (NCS)</h2>
+                        <p>Tras un análisis exhaustivo de todas las plataformas, <strong>Zenon Energy Edition</strong> se consolida como la solución superior para entornos mineros de alta exigencia. Su arquitectura unificada y rendimiento probado en campo le otorgan una ventaja decisiva.</p>
+                        
+                        <h3>Factores Clave de la Victoria:</h3>
+                        <ul>
+                            <li><strong>Rendimiento Superior (Puntuación: 4.5/5):</strong> Demuestra la mayor robustez en escalabilidad, redundancia y una interfaz de usuario altamente funcional, minimizando los puntos de fallo.</li>
+                            <li><strong>Enfoque Especializado (Puntuación: 5/5):</strong> Su alta capacidad de adaptación a operaciones mineras (MES, mantenimiento, etc.) es nativa, no un añadido. Esto reduce drásticamente el tiempo y costo de implementación.</li>
+                            <li><strong>Eficiencia y TCO (Puntuación: 4/5):</strong> Aunque la inversión inicial es considerable, su bajo Costo Total de Propiedad (TCO) se debe a una ingeniería sin programación y una compatibilidad de versiones que evita costosas migraciones.</li>
+                            <li><strong>Flexibilidad (Puntuación: 5/5):</strong> Es agnóstico a nivel de hardware y antivirus, ofreciendo una libertad que las soluciones de un solo proveedor no pueden igualar.</li>
+                        </ul>
+
+                        <h3>Posiciones Secundarias:</h3>
+                        <p><strong>MicroScada X (Hitachi)</strong> se posiciona como un competidor fuerte, especialmente en redundancia, pero con una menor flexibilidad de interfaz. Plataformas como <strong>Power Operation (Schneider)</strong> quedan significativamente rezagadas debido a reportes de inestabilidad, una herramienta HMI deficiente y problemas críticos en funcionalidades básicas como la redundancia.</p>
+                        
+                        <h3>Conclusión Final:</h3>
+                        <p>Para operaciones donde el tiempo de actividad es crítico y la integración con sistemas de producción es fundamental, <strong>Zenon</strong> no es solo una opción, es la inversión estratégica para garantizar el control y la eficiencia operativa.</p>
+                    </div>
+                    <button id="export-pdf-btn" class="cta-button">Exportar Veredicto a PDF</button>
                 </div>
-            </section>
+            </div>
         </main>
-        
-        <footer>
-            <p>Dashboard diseñado por IA para operaciones de élite.</p>
-        </footer>
     </div>
     <script src="script.js"></script>
 </body>
