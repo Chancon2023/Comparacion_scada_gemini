@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 :root {
     --bg-color: #121212; --primary-dark: #1A1A1A; --secondary-dark: #2C2C2C;
-    --accent-color: #00FF7F; --text-color: #E0E0E0; --text-muted: #A0A0A0;
+    --accent-color: #00FF7F; --text-color: #E0E0E0; --text-muted: #A0A0E0;
     --glow-color: rgba(0, 255, 127, 0.5); --border-radius: 10px; --sidebar-width: 250px;
     --color-cumple: #00FF7F; --color-no-cumple: #FF4136;
 }
@@ -28,7 +28,7 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); co
 .accent { color: var(--accent-color); }
 /* --- Página Matriz --- */
 .filter-controls { display: flex; flex-wrap: wrap; gap: 1rem; background-color: var(--primary-dark); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 2rem; }
-.filter-controls label { display: flex; align-items: center; }
+.filter-controls label { display: flex; align-items: center; cursor: pointer; }
 .filter-controls input[type="checkbox"] { margin-right: 0.5rem; accent-color: var(--accent-color); transform: scale(1.2); }
 .matrix-container { display: flex; gap: 2rem; }
 .matrix-table-wrapper { flex-grow: 1; overflow-x: auto; background: var(--primary-dark); padding: 1rem; border-radius: var(--border-radius); }
@@ -38,30 +38,43 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); co
 #comparison-matrix tbody tr { cursor: pointer; transition: background-color 0.2s; }
 #comparison-matrix tbody tr:hover, #comparison-matrix tbody tr.selected { background-color: var(--secondary-dark); }
 .matrix-cell-content { display: flex; flex-direction: column; gap: 0.5rem; }
-.compliance-indicator { font-weight: 700; border-radius: 4px; padding: 2px 6px; text-align: center; font-size: 0.8rem; }
+.compliance-indicator { font-weight: 700; border-radius: 4px; padding: 2px 6px; text-align: center; font-size: 0.8rem; width: fit-content; }
 .compliance-cumple { background-color: var(--color-cumple); color: var(--primary-dark); }
 .compliance-no-cumple { background-color: var(--color-no-cumple); color: #FFF; }
 .score-value { font-weight: 600; font-size: 0.9rem; color: var(--text-color); }
 .cell-detail { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
 .features-sidebar { width: 350px; flex-shrink: 0; background-color: var(--primary-dark); padding: 1.5rem; border-radius: var(--border-radius); }
+.features-sidebar h3, .features-sidebar h4 { color: var(--accent-color); }
 /* --- Página Análisis Detallado --- */
 .analisis-main-grid { display: grid; grid-template-columns: 280px 1fr; grid-template-rows: auto 1fr; gap: 2rem; }
 .analisis-controls-wrapper { grid-column: 1 / 2; grid-row: 1 / 3; background: var(--primary-dark); padding: 1.5rem; border-radius: var(--border-radius); }
+.analisis-controls-wrapper h3 { font-size: 1.5rem; margin-bottom: 1.5rem; color: #FFF; }
 .control-group { margin-bottom: 1.5rem; }
 .control-group label { display: block; font-weight: 600; margin-bottom: 0.75rem; }
+.control-group select { width: 100%; background: var(--secondary-dark); color: var(--text-color); border: 1px solid var(--text-muted); border-radius: 5px; padding: 0.5rem; font-family: 'Poppins'; }
 .criteria-checkboxes { display: flex; flex-direction: column; gap: 0.5rem; max-height: 400px; overflow-y: auto; padding-right: 10px;}
 .chart-wrapper.radar-wrapper { grid-column: 2 / 3; grid-row: 1 / 2; background: var(--primary-dark); padding: 1.5rem; border-radius: var(--border-radius); min-height: 500px; }
 .ficha-tecnica { grid-column: 2 / 3; grid-row: 2 / 3; background: var(--primary-dark); padding: 2rem; border-radius: var(--border-radius); }
 .ficha-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; }
 .ficha-logo { font-size: 3rem; font-weight: 700; color: var(--accent-color); line-height: 1; }
+.ficha-header h2 { font-size: 2rem; color: #FFF; }
+.ficha-summary { font-style: italic; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
 .ficha-section h4 { font-size: 1.2rem; border-bottom: 2px solid var(--secondary-dark); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+.ficha-section ul { list-style: none; padding: 0; }
+.ficha-section ul li { position: relative; padding-left: 25px; margin-bottom: 0.7rem; }
 .pros-list li::before { content: '✔'; color: var(--color-cumple); position: absolute; left: 0; }
 .cons-list li::before { content: '✘'; color: var(--color-no-cumple); position: absolute; left: 0; }
 /* --- Página Ranking --- */
 .ranking-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .ranked-list-container, .conclusion-container { background: var(--primary-dark); padding: 2rem; border-radius: var(--border-radius); }
+.ranked-list-container h3, .conclusion-container h3 { font-size: 1.5rem; margin-bottom: 1.5rem; color: #FFF; }
 .ranked-item { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--secondary-dark); }
+.ranked-item:last-child { border-bottom: none; }
 .rank-position { font-size: 2.5rem; font-weight: 700; color: var(--accent-color); line-height: 1; }
+.rank-details h4 { font-size: 1.3rem; color: #FFF; margin-bottom: 0.25rem; }
 .rank-details .score { font-size: 1rem; color: var(--text-muted); font-style: italic; margin-bottom: 0.5rem; }
+.rank-details p { font-size: 0.9rem; line-height: 1.5; }
+.conclusion-container p, .conclusion-container h4 { margin-bottom: 1rem; line-height: 1.7; }
+.conclusion-container h4 { color: var(--accent-color); margin-top: 1.5rem; }
 .cta-button { display: inline-block; background-color: var(--accent-color); color: var(--primary-dark); font-size: 1.1rem; font-weight: 600; text-decoration: none; padding: 0.8rem 2rem; border-radius: 50px; border: none; transition: all 0.3s ease; box-shadow: 0 0 15px var(--glow-color); cursor: pointer; margin-top: 2rem; }
-.cta-button:hover { transform: translateY(-3px) scale(1.03); }
+.cta-button:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 0 25px var(--glow-color); }
