@@ -52,10 +52,9 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); co
 .control-group { margin-bottom: 2rem; }
 .control-group label { display: block; font-weight: 600; margin-bottom: 0.75rem; }
 .pills-container { display: flex; flex-direction: column; gap: 0.75rem; }
-.platform-pill, .criteria-pill { display: flex; align-items: center; gap: 0.75rem; background-color: var(--secondary-dark); padding: 0.6rem 1rem; border-radius: 5px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease-in-out; }
+.platform-pill, .criteria-pill { display: flex; align-items: center; gap: 0.75rem; background-color: var(--secondary-dark); padding: 0.6rem 1rem; border-radius: 5px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease-in-out; user-select: none; }
 .platform-pill:hover, .criteria-pill:hover { background-color: #3c3c3c; }
-.color-dot { width: 12px; height: 12px; border-radius: 50%; }
-.criteria-pill { background-color: var(--secondary-dark); }
+.color-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
 .platform-pill.active { border-color: var(--platform-color); background-color: color-mix(in srgb, var(--platform-color) 20%, var(--secondary-dark)); }
 .criteria-pill.active { border-color: var(--accent-color); background-color: color-mix(in srgb, var(--accent-color) 20%, var(--secondary-dark)); }
 .pills-container.criteria-pills { max-height: 350px; overflow-y: auto; padding-right: 10px; }
@@ -78,3 +77,4 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); co
 .rank-details .score { font-size: 1rem; color: var(--text-muted); font-style: italic; margin-bottom: 0.5rem; }
 .cta-button { display: inline-block; background-color: var(--accent-color); color: var(--primary-dark); font-size: 1.1rem; font-weight: 600; text-decoration: none; padding: 0.8rem 2rem; border-radius: 50px; border: none; transition: all 0.3s ease; box-shadow: 0 0 15px var(--glow-color); cursor: pointer; margin-top: 2rem; }
 .cta-button:hover { transform: translateY(-3px) scale(1.03); }
+
