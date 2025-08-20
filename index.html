@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCADA Command Center // Final Version</title>
+    <title>Análisis Comparativo de Plataformas SCADA</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -12,20 +12,20 @@
     <div class="app-container">
         <nav class="sidebar">
             <div class="sidebar-header">
-                <h2>SCADA<span>//CC</span></h2>
+                <h2>SCADA<span>//Analysis</span></h2>
             </div>
             <ul>
                 <li><a href="#inicio" class="nav-link active" data-page="inicio"><span>Matriz Comparativa</span></a></li>
                 <li><a href="#analisis" class="nav-link" data-page="analisis"><span>Análisis Detallado</span></a></li>
-                <li><a href="#ranking" class="nav-link" data-page="ranking"><span>Ranking Final</span></a></li>
+                <li><a href="#ranking" class="nav-link" data-page="ranking"><span>Clasificación Final</span></a></li>
             </ul>
         </nav>
 
         <main class="main-content">
             <div id="inicio" class="page active">
                  <header class="page-header">
-                    <h1>Matriz Comparativa</h1>
-                    <p>Filtra sistemas y selecciona criterios para un análisis detallado.</p>
+                    <h1>Matriz de Evaluación Técnica</h1>
+                    <p>Filtre sistemas y seleccione criterios para un análisis granular.</p>
                 </header>
                 <div class="filter-controls" id="scada-filter-container"></div>
                 <div class="matrix-container">
@@ -34,55 +34,58 @@
                     </div>
                     <aside class="features-sidebar" id="features-sidebar">
                         <h3><span class="accent">//</span> Detalles del Criterio</h3>
-                        <div id="features-content"><p>Selecciona una fila en la matriz para ver detalles.</p></div>
+                        <div id="features-content"><p>Seleccione una fila para visualizar detalles.</p></div>
                     </aside>
                 </div>
             </div>
 
             <div id="analisis" class="page">
                 <header class="page-header">
-                    <h1>Análisis de Rendimiento</h1>
-                    <p>Compara perfiles y revisa la ficha técnica de cada plataforma.</p>
+                    <h1>Análisis de Perfil Técnico</h1>
+                    <p>Compare perfiles de rendimiento y revise la ficha técnica de cada plataforma.</p>
                 </header>
                 <div class="analisis-main-grid">
                     <div class="analisis-controls-wrapper">
-                        <h3><span class="accent">//</span> Controles de Radar</h3>
+                        <h3><span class="accent">//</span> Parámetros de Visualización</h3>
                         <div class="control-group">
-                            <label for="radar-systems-selector">Comparar Sistemas (máx. 3):</label>
+                            <label for="radar-systems-selector">Seleccionar Sistemas (máx. 3):</label>
                             <select id="radar-systems-selector" multiple></select>
                         </div>
                         <div class="control-group">
-                            <label>Seleccionar Criterios:</label>
-                            <div class="criteria-checkboxes" id="criteria-checkboxes">
-                                </div>
+                            <label>Seleccionar Criterios de Evaluación:</label>
+                            <div class="criteria-checkboxes" id="criteria-checkboxes"></div>
                         </div>
                     </div>
                     <div class="chart-wrapper radar-wrapper">
                         <canvas id="radar-chart"></canvas>
                     </div>
-                    <div class="ficha-tecnica" id="ficha-tecnica">
-                        </div>
+                    <div class="ficha-tecnica" id="ficha-tecnica"></div>
                 </div>
             </div>
             
             <div id="ranking" class="page">
                 <header class="page-header">
-                    <h1>Ranking y Veredicto Final</h1>
-                    <p>Conclusión basada en el análisis de datos para operaciones mineras.</p>
+                    <h1>Clasificación y Conclusión Ejecutiva</h1>
+                    <p>Resultados finales basados en la puntuación ponderada de los criterios evaluados.</p>
                 </header>
-                <div class="ranking-container" id="conclusion-content">
-                    <h2><span class="accent">🏆</span> Campeón para Minería: Zenon Energy Edition (NCS)</h2>
-                    <p>Tras un análisis exhaustivo, <strong>Zenon Energy Edition</strong> se consolida como la solución superior para entornos mineros de alta exigencia.</p>
-                    <h3>Factores Clave de la Victoria:</h3>
-                    <ul>
-                        <li><strong>Rendimiento Superior:</strong> La mayor robustez en escalabilidad, redundancia y una interfaz funcional.</li>
-                        <li><strong>Enfoque Especializado:</strong> Su alta capacidad de adaptación a operaciones mineras es nativa, no un añadido.</li>
-                        <li><strong>Eficiencia y TCO:</strong> Bajo Costo Total de Propiedad gracias a una ingeniería eficiente y compatibilidad entre versiones.</li>
-                    </ul>
-                    <h3>Conclusión Final:</h3>
-                    <p>Para operaciones críticas, <strong>Zenon</strong> es la inversión estratégica para garantizar el control y la eficiencia operativa.</p>
+                <div id="ranking-export-container">
+                    <div class="ranking-layout">
+                        <div class="ranked-list-container">
+                             <h3><span class="accent">//</span> Clasificación por Rendimiento</h3>
+                            <div id="ranked-list">
+                                </div>
+                        </div>
+                        <div class="conclusion-container">
+                            <h3><span class="accent">//</span> Conclusión Ejecutiva</h3>
+                            <p>El análisis cuantitativo, derivado de 10 criterios técnicos, posiciona a <strong>Zenon Energy Edition (NCS)</strong> como la plataforma con el rendimiento más alto y equilibrado para aplicaciones industriales críticas, particularmente en el sector minero.</p>
+                            <p>Su superioridad se fundamenta en una arquitectura nativamente integrada, alta fiabilidad en mecanismos de redundancia y una escalabilidad probada en campo. Estos factores, combinados con un Costo Total de Propiedad (TCO) competitivo, minimizan los riesgos de implementación y aseguran la continuidad operacional.</p>
+                            <p>Plataformas como <strong>MicroScada X</strong> demuestran alta competencia en áreas específicas como la redundancia, pero presentan una menor flexibilidad y adaptabilidad nativa. En el extremo inferior, soluciones como <strong>Power Operation</strong> exhiben deficiencias críticas en áreas fundamentales (redundancia, estabilidad), representando un riesgo operativo inaceptable para entornos de alta exigencia.</p>
+                            <h4>Recomendación Final:</h4>
+                            <p>Se recomienda la adopción de <strong>Zenon Energy Edition (NCS)</strong> como solución estándar para nuevos proyectos, dada su alineación superior con los requerimientos de fiabilidad, integración y eficiencia a largo plazo.</p>
+                        </div>
+                    </div>
                 </div>
-                <button id="export-pdf-btn" class="cta-button">Exportar Veredicto a PDF</button>
+                <button id="export-pdf-btn" class="cta-button">Exportar Conclusión a PDF</button>
             </div>
         </main>
     </div>
