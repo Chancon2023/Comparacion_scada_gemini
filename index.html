@@ -3,57 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis Definitivo de Sistemas SCADA</title>
+    <title>SCADA Dashboard // Command Center</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Análisis Definitivo de Sistemas SCADA 🚀</h1>
-            <p class="subtitle">La herramienta todo-en-uno para una evaluación completa basada en la documentación.</p>
+        <header class="hero animated">
+            <div class="hero-content">
+                <h1>SCADA Command Center</h1>
+                <p class="subtitle">Análisis de plataformas para operaciones de alto rendimiento.</p>
+                <a href="#dashboard-interactivo" class="cta-button">Acceder al Dashboard</a>
+            </div>
         </header>
 
-        <nav class="tab-nav">
-            <button class="tab-btn active" data-tab="tab-table">📄 Tabla Comparativa</button>
-            <button class="tab-btn" data-tab="tab-dashboard">📊 Dashboard Visual</button>
-            <button class="tab-btn" data-tab="tab-ranking">🏆 Ranking y Análisis</button>
-        </nav>
-
         <main>
-            <div id="tab-table" class="tab-content active">
-                <div class="card">
-                    <h2>Tabla Comparativa Detallada</h2>
-                    <p>Visualización completa de todos los criterios y sistemas SCADA descritos en el documento.</p>
-                    <div class="table-container" id="full-comparison-table">
+            <section id="dashboard-interactivo" class="card-section animated">
+                <h2 class="section-title"><span>//</span> Dashboard Interactivo 📊</h2>
+                <div class="dashboard-controls">
+                    <label for="metric-selector">Métrica de Combate:</label>
+                    <select id="metric-selector">
+                        <option value="adaptacion" selected>Adaptación a Minería</option>
+                        <option value="escalabilidad">Escalabilidad</option>
+                        <option value="implementacion">Velocidad de Implementación</option>
+                        <option value="costo">Costo Total (TCO)</option>
+                        <option value="integracion">Poder de Integración</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="scada-comparison-chart"></canvas>
+                </div>
+            </section>
+
+            <section id="reseñas" class="animated">
+                <h2 class="section-title"><span>//</span> Intel de Campo: Pros y Contras</h2>
+                <div class="reviews-grid">
+                    <article class="review-card">
+                        <div class="card-header">
+                            <h3>Zenon COPADATA</h3>
                         </div>
+                        <div class="card-content">
+                            <h4><span class="pro-icon">+</span> Puntos Fuertes:</h4>
+                            <ul><li>Interfaz robusta para RDP.</li><li>Arquitectura redundante probada en minería.</li><li>Soporte nativo de protocolo PRP.</li><li>Escalabilidad top para Centros de Control.</li></ul>
+                            <h4><span class="con-icon">-</span> Debilidades:</h4>
+                            <p>Sin debilidades notables reportadas.</p>
+                        </div>
+                    </article>
+                    <article class="review-card">
+                        <div class="card-header">
+                            <h3>MicroScada X HITACHI</h3>
+                        </div>
+                        <div class="card-content">
+                            <h4><span class="pro-icon">+</span> Puntos Fuertes:</h4>
+                            <ul><li>HMI flexible con plantillas.</li><li>Redundancia sólida (Shadowing).</li><li>Implementado con éxito en C.C. de minería.</li></ul>
+                            <h4><span class="con-icon">-</span> Debilidades:</h4>
+                            <p>Sin debilidades notables reportadas.</p>
+                        </div>
+                    </article>
+                    <article class="review-card">
+                        <div class="card-header">
+                            <h3>Power Operation Schneider</h3>
+                        </div>
+                        <div class="card-content">
+                            <h4><span class="pro-icon">+</span> Puntos Fuertes:</h4>
+                            <p>No se reportaron ventajas claras.</p>
+                            <h4><span class="con-icon">-</span> Debilidades:</h4>
+                            <ul><li>Herramientas HMI deficientes.</li><li>Dependencia de software obsoleto (Excel 2016).</li><li>Fallas críticas en la configuración de redundancia.</li><li>Sistema inestable por exceso de logs.</li></ul>
+                        </div>
+                    </article>
                 </div>
-            </div>
+            </section>
 
-            <div id="tab-dashboard" class="tab-content">
-                <div class="card">
-                    <h2>Comparador Visual Dinámico (Gráfico de Araña)</h2>
-                    <p>Selecciona los sistemas que deseas comparar visualmente. El gráfico se actualizará en tiempo real.</p>
-                    <div id="scada-selectors-chart"></div>
-                    <div class="chart-container">
-                        <canvas id="scada-radar-chart"></canvas>
-                    </div>
+             <section id="conclusion" class="card-section animated">
+                <h2 class="section-title"><span>//</span> Veredicto Final 🏆</h2>
+                <div class="conclusion-box">
+                    <p>
+                    Para el campo de batalla de la minería, <strong>Zenon Energy Edition (NCS)</strong> es el campeón indiscutible. Su plataforma unificada, bajo TCO y robustez general lo posicionan como la herramienta superior para un control total y sin fallos.
+                    </p>
                 </div>
-            </div>
-
-            <div id="tab-ranking" class="tab-content">
-                <div class="card">
-                    <h2>Ranking Basado en Evidencia</h2>
-                    <p>Clasificación de los sistemas SCADA según los "Pros" y "Contras" identificados en los comentarios del documento.</p>
-                    <div id="ranking-container"></div>
-                </div>
-                <div class="card">
-                    <h2>✅ Pros y ❌ Contras por Sistema</h2>
-                    <p>Análisis detallado de los puntos fuertes y débiles de cada SCADA, extraídos directamente de la columna "Comentarios".</p>
-                    <div id="pros-cons-container"></div>
-                </div>
-            </div>
+            </section>
         </main>
+        
+        <footer>
+            <p>Dashboard diseñado por IA para operaciones de élite.</p>
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>
