@@ -11,18 +11,18 @@ document.addEventListener('DOMContentLoaded', function () {
         {
             id: 'zee600', name: 'ZEE600 ABB (Zenon)', logo_text: 'Z600',
             summary: 'Implementación de ABB de la plataforma Zenon. Comparte el núcleo tecnológico de COPA-DATA, beneficiándose de su robustez, aunque con consideraciones específicas de ciclo de vida y soporte.',
-            pros: ['Hereda la arquitectura robusta, escalabilidad y la interfaz de usuario de Zenon.', 'Alta disponibilidad para acceso remoto (RDP), adecuado para operaciones distribuidas.', 'Capacidad comprobada para implementar arquitecturas de alta redundancia.'],
+            pros: ['Hereda la arquitectura robusta, escalabilidad y la excelente interfaz de Zenon.', 'Alta disponibilidad para acceso remoto (RDP), adecuado para operaciones distribuidas.', 'Capacidad comprobada para implementar arquitecturas de alta redundancia.'],
             cons: ['El ciclo de vida de las versiones opera con un desfase respecto a la versión principal de Zenon, implicando un posible retraso en la adopción de nuevas funcionalidades y parches.', 'El soporte técnico es canalizado a través de COPA-DATA, sin un service desk primario de ABB.', 'Ausencia de métricas de rendimiento (KPIs) o casos de estudio publicados por ABB.'],
             scores: { arquitectura: 5, redundancia: 5, escalabilidad: 5, ciberseguridad: 4, interfaz: 4, adaptacionMineria: 5, integracionSubs: 5, funcionalidadesNativas: 4, tco: 4, tiempoImplementacion: 4 }
         },
         {
             id: 'microscada', name: 'MicroScada X HITACHI', logo_text: 'MSX',
-            summary: 'Solución SCADA consolidada de Hitachi Energy, con un fuerte enfoque en el sector de utilities para la gestión de redes eléctricas. Destaca por su alta fiabilidad.',
+            summary: 'Solución SCADA consolidada en el sector de utilities para la gestión de redes eléctricas. Destaca por su alta fiabilidad.',
             pros: ['Alta fiabilidad en mecanismos de redundancia (Shadowing).', 'Arquitectura validada en entornos de misión crítica (transmisión y generación eléctrica).', 'Capacidad de escalamiento adecuada para sistemas de gran tamaño.', 'Estandarización de HMI facilitada por el uso de plantillas.'],
             cons: ['Flexibilidad y modernidad de la interfaz de usuario inferior a la de competidores directos.', 'La adaptación a procesos mineros no es nativa y requiere personalización e integración adicional.', 'Mayor complejidad de ingeniería y mantenimiento asociado.', 'Potencial dependencia de proveedores terceros para ciertos protocolos de comunicación.'],
             scores: { arquitectura: 4, redundancia: 5, escalabilidad: 4, ciberseguridad: 4, interfaz: 3, adaptacionMineria: 3, integracionSubs: 4, funcionalidadesNativas: 3, tco: 2, tiempoImplementacion: 2 }
         },
-         {
+        {
             id: 'adms', name: 'EcoStruxure ADMS', logo_text: 'ADMS',
             summary: 'Plataforma de Schneider Electric para la gestión avanzada de redes de distribución (ADMS). Su principal fortaleza son las aplicaciones analíticas, pero presenta carencias en documentación y soporte.',
             pros: ['Interfaz de control unificada (Single Pane of Glass HMI).', 'Gestión de conmutación y notificaciones de interrupciones integradas.', 'Arquitectura modular orientada a empresas de servicios públicos (utilities).'],
@@ -56,15 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
         return { ...scada, averageScore };
     }).sort((a, b) => b.averageScore - a.averageScore);
-
-    // --- INICIALIZACIÓN GENERAL ---
-    function initialize() {
-        initNavigation();
-        initMatrix();
-        initAnalisis();
-        initRanking();
-    }
-
+    
     // --- LÓGICA DE NAVEGACIÓN ---
     function initNavigation() {
         const navLinks = document.querySelectorAll('.nav-link');
@@ -79,6 +71,169 @@ document.addEventListener('DOMContentLoaded', function () {
                 link.classList.add('active');
             });
         });
+    }
+
+    // --- PÁGINA: MATRIZ ---
+    function initMatrix() {
+        const matrixTable = document.getElementById('comparison-matrix');
+        const filterContainer = document.getElementById('scada-filter-container');
+        matrixTable.innerHTML = '';
+        filterContainer.innerHTML = '';
+
+        let headerRow = '<tr><th>Criterio</th>';
+        scadaData.forEach(scada => {
+            headerRow += `<th data-scada-id="${scada.id}">${scada.name}</th>`;
+            filterContainer.innerHTML += `<label class="checkbox-wrapper"><input type="checkbox" class="scada-filter-cb" value="${scada.id}" checked> ${scada.name}</label>`;
+        });
+        headerRow += '</tr>';
+
+        let bodyHtml = '';
+        Object.keys(features).forEach(featureKey => {
+            bodyHtml += `<tr data-feature-key="${featureKey}"><td>${features[featureKey]}</td>`;
+            scadaData.forEach(scada => {
+                const score = scada.scores[featureKey] || 0;
+                bodyHtml += `<td class="score-cell score-${score}" data-scada-id="${scada.id}">${score}/5</td>`;
+            });
+            bodyHtml += '</tr>';
+        });
+
+        matrixTable.innerHTML = `<thead>${headerRow}</thead><tbody>${bodyHtml}</tbody>`;
+
+        document.querySelectorAll('.scada-filter-cb').forEach(cb => cb.addEventListener('change', updateMatrixVisibility));
+        document.querySelectorAll('#comparison-matrix tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                document.querySelectorAll('#comparison-matrix tbody tr').forEach(r => r.classList.remove('selected'));
+                row.classList.add('selected');
+                updateFeaturesSidebar(row.getAttribute('data-feature-key'));
+            });
+        });
+    }
+
+    function updateMatrixVisibility() {
+        const visibleScadaIds = Array.from(document.querySelectorAll('.scada-filter-cb:checked')).map(cb => cb.value);
+        document.querySelectorAll('#comparison-matrix th, #comparison-matrix td').forEach(cell => {
+            const scadaId = cell.getAttribute('data-scada-id');
+            if (scadaId) {
+                cell.style.display = visibleScadaIds.includes(scadaId) ? '' : 'none';
+            }
+        });
+        const selectedRow = document.querySelector('#comparison-matrix tbody tr.selected');
+        if (selectedRow) {
+            updateFeaturesSidebar(selectedRow.getAttribute('data-feature-key'));
+        }
+    }
+
+    function updateFeaturesSidebar(featureKey) {
+        const contentEl = document.getElementById('features-content');
+        if (!featureKey) {
+            contentEl.innerHTML = '<p>Seleccione una fila para visualizar detalles.</p>';
+            return;
+        }
+        let content = `<h3><span class="accent">//</span> ${features[featureKey]}</h3>`;
+        const visibleScadaIds = Array.from(document.querySelectorAll('.scada-filter-cb:checked')).map(cb => cb.value);
+        scadaData.filter(s => visibleScadaIds.includes(s.id)).forEach(scada => {
+            content += `<h4>${scada.name}</h4><p>Puntuación: ${scada.scores[featureKey]}/5.</p>`;
+        });
+        contentEl.innerHTML = content;
+    }
+
+    // --- PÁGINA: ANÁLISIS DETALLADO ---
+    let radarChart = null;
+    function initAnalisis() {
+        const radarSystemsSelector = document.getElementById('radar-systems-selector');
+        const criteriaCheckboxesContainer = document.getElementById('criteria-checkboxes');
+        
+        scadaData.forEach(s => {
+            radarSystemsSelector.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+        });
+        Object.keys(features).forEach(key => {
+            criteriaCheckboxesContainer.innerHTML += `<label><input type="checkbox" class="criteria-cb" value="${key}" checked> ${features[key]}</label>`;
+        });
+
+        radarSystemsSelector.addEventListener('change', updateAnalisisPage);
+        document.querySelectorAll('.criteria-cb').forEach(cb => cb.addEventListener('change', updateAnalisisPage));
+        
+        radarSystemsSelector.options[0].selected = true;
+        updateAnalisisPage();
+    }
+
+    function updateAnalisisPage() {
+        const selectedSystemIds = Array.from(document.getElementById('radar-systems-selector').selectedOptions).map(opt => opt.value).slice(0, 3);
+        const selectedCriteriaKeys = Array.from(document.querySelectorAll('.criteria-cb:checked')).map(cb => cb.value);
+        
+        updateRadarChart(selectedSystemIds, selectedCriteriaKeys);
+        
+        if (selectedSystemIds.length > 0) {
+            updateFichaTecnica(selectedSystemIds[0]);
+        } else {
+            document.getElementById('ficha-tecnica').innerHTML = '<p style="text-align: center; padding: 2rem;">Seleccione un sistema para visualizar su ficha técnica.</p>';
+        }
+    }
+    
+    function updateRadarChart(systemIds, criteriaKeys) {
+        const ctx = document.getElementById('radar-chart').getContext('2d');
+        const radarColors = ['rgba(0, 255, 127, 0.4)', 'rgba(0, 191, 255, 0.4)', 'rgba(255, 215, 0, 0.4)'];
+        const radarBorderColors = ['#00FF7F', '#00BFFF', '#FFD700'];
+
+        if (radarChart) {
+            radarChart.destroy();
+        }
+
+        if (systemIds.length === 0 || criteriaKeys.length === 0) {
+            return;
+        }
+
+        const datasets = scadaData.filter(s => systemIds.includes(s.id)).map((scada, index) => ({
+            label: scada.name,
+            data: criteriaKeys.map(key => scada.scores[key]),
+            backgroundColor: radarColors[index],
+            borderColor: radarBorderColors[index],
+            borderWidth: 2,
+            pointBackgroundColor: radarBorderColors[index]
+        }));
+        
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: criteriaKeys.map(key => features[key]),
+                datasets: datasets
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'top', labels: { color: '#FFF', font: { size: 14 } } } },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        pointLabels: { color: '#FFF', font: { size: 12 } },
+                        suggestedMin: 0, suggestedMax: 5,
+                        ticks: { backdropColor: 'transparent', color: '#FFF', stepSize: 1 }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateFichaTecnica(scadaId) {
+        const scada = scadaData.find(s => s.id === scadaId);
+        const fichaEl = document.getElementById('ficha-tecnica');
+        const prosHtml = scada.pros.map(p => `<li>${p}</li>`).join('');
+        const consHtml = scada.cons.map(c => `<li>${c}</li>`).join('');
+
+        fichaEl.innerHTML = `
+            <div class="ficha-header">
+                <div class="ficha-logo">${scada.logo_text}</div>
+                <h2>${scada.name}</h2>
+            </div>
+            <p class="ficha-summary">${scada.summary}</p>
+            <div class="ficha-section">
+                <h4><span class="accent">//</span> Ventajas Clave</h4>
+                <ul class="pros-list">${prosHtml}</ul>
+            </div>
+            <div class="ficha-section">
+                <h4><span class="accent">//</span> Puntos a Considerar</h4>
+                <ul class="cons-list">${consHtml}</ul>
+            </div>`;
     }
 
     // --- PÁGINA: RANKING ---
@@ -100,8 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="score">Puntuación Promedio: ${scada.averageScore.toFixed(2)} / 5.00</div>
                         <p>${analysis}</p>
                     </div>
-                </div>
-            `;
+                </div>`;
         });
 
         document.getElementById('export-pdf-btn').addEventListener('click', () => {
@@ -113,48 +267,13 @@ document.addEventListener('DOMContentLoaded', function () {
              html2pdf().set(opt).from(element).save();
         });
     }
-    
-    // El resto de funciones (initMatrix, initAnalisis, etc.) permanecen igual que la versión anterior.
-    // Se incluyen aquí de forma abreviada para completitud.
-    let radarChart = null;
-    function initMatrix(){/*...*/}
-    function initAnalisis() {
-        const radarSystemsSelector = document.getElementById('radar-systems-selector');
-        const criteriaCheckboxesContainer = document.getElementById('criteria-checkboxes');
-        scadaData.forEach(s => radarSystemsSelector.innerHTML += `<option value="${s.id}">${s.name}</option>`);
-        Object.keys(features).forEach(key => {
-            criteriaCheckboxesContainer.innerHTML += `<label><input type="checkbox" class="criteria-cb" value="${key}" checked> ${features[key]}</label>`;
-        });
-        radarSystemsSelector.addEventListener('change', updateAnalisisPage);
-        document.querySelectorAll('.criteria-cb').forEach(cb => cb.addEventListener('change', updateAnalisisPage));
-        radarSystemsSelector.options[0].selected = true;
-        updateAnalisisPage();
-    }
-    function updateAnalisisPage(){
-        const selectedSystemIds = Array.from(document.getElementById('radar-systems-selector').selectedOptions).map(opt => opt.value).slice(0, 3);
-        const selectedCriteriaKeys = Array.from(document.querySelectorAll('.criteria-cb:checked')).map(cb => cb.value);
-        updateRadarChart(selectedSystemIds, selectedCriteriaKeys);
-        if (selectedSystemIds.length > 0) {
-            updateFichaTecnica(selectedSystemIds[0]);
-        } else {
-            document.getElementById('ficha-tecnica').innerHTML = '<p style="text-align: center; padding: 2rem;">Seleccione un sistema para visualizar su ficha técnica.</p>';
-        }
-    }
-    function updateRadarChart(systemIds, criteriaKeys) {
-        if(radarChart) radarChart.destroy();
-        if (systemIds.length === 0 || criteriaKeys.length === 0) return;
-        const ctx = document.getElementById('radar-chart').getContext('2d');
-        const datasets = scadaData.filter(s => systemIds.includes(s.id)).map((scada, index) => ({
-            label: scada.name,
-            data: criteriaKeys.map(key => scada.scores[key]),
-            backgroundColor: ['rgba(0, 255, 127, 0.4)', 'rgba(0, 191, 255, 0.4)', 'rgba(255, 215, 0, 0.4)'][index],
-            borderColor: ['#00FF7F', '#00BFFF', '#FFD700'][index],
-            borderWidth: 2,
-        }));
-        radarChart = new Chart(ctx, { type: 'radar', data: { labels: criteriaKeys.map(key => features[key]), datasets }, options: { /* Opciones de estilo */ } });
-    }
-    function updateFichaTecnica(scadaId){/*...*/}
 
-    // Llamada a la inicialización
+    // --- INICIALIZACIÓN GENERAL ---
     initialize();
+    function initialize() {
+        initNavigation();
+        initMatrix();
+        initAnalisis();
+        initRanking();
+    }
 });
