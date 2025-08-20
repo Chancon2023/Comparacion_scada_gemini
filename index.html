@@ -42,24 +42,27 @@
             <div id="analisis" class="page">
                 <header class="page-header">
                     <h1>Análisis de Perfil Técnico</h1>
-                    <p>Compare perfiles de rendimiento y revise la ficha técnica de cada plataforma.</p>
+                    <p>Seleccione plataformas y criterios para visualizar la comparativa de rendimiento.</p>
                 </header>
                 <div class="analisis-main-grid">
                     <div class="analisis-controls-wrapper">
                         <h3><span class="accent">//</span> Parámetros de Visualización</h3>
                         <div class="control-group">
-                            <label for="radar-systems-selector">Seleccionar Sistemas (máx. 3):</label>
-                            <select id="radar-systems-selector" multiple></select>
+                            <label>Seleccionar Plataformas (máx. 3):</label>
+                            <div class="pills-container" id="platform-selector-pills">
+                                </div>
                         </div>
                         <div class="control-group">
                             <label>Seleccionar Criterios de Evaluación:</label>
-                            <div class="criteria-checkboxes" id="criteria-checkboxes"></div>
+                            <div class="pills-container criteria-pills" id="criteria-selector-pills">
+                                </div>
                         </div>
                     </div>
                     <div class="chart-wrapper radar-wrapper">
                         <canvas id="radar-chart"></canvas>
                     </div>
-                    <div class="ficha-tecnica" id="ficha-tecnica"></div>
+                    <div class="ficha-tecnica" id="ficha-tecnica">
+                         </div>
                 </div>
             </div>
             
