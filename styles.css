@@ -1,155 +1,225 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-/* --- Variables y Estilos Base --- */
 :root {
-    --primary-color: #0d47a1;
-    --secondary-color: #1976d2;
-    --accent-color: #42a5f5;
-    --bg-color: #f4f6f8;
-    --card-bg-color: #ffffff;
-    --text-color: #212121;
-    --success-color: #2e7d32;
-    --danger-color: #c62828;
+    --bg-color: #121212;
+    --primary-dark: #1A1A1A;
+    --secondary-dark: #2C2C2C;
+    --accent-color: #00FF7F; /* Verde Neón */
+    --text-color: #E0E0E0;
+    --text-muted: #A0A0A0;
+    --glow-color: rgba(0, 255, 127, 0.5);
+    --border-radius: 10px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    margin: 0;
-    padding: 20px;
+    overflow-x: hidden;
 }
 
-/* --- Contenedor y Header --- */
 .container {
     max-width: 1400px;
-    margin: auto;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
-header {
+/* --- Hero Section --- */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    margin-bottom: 30px;
-    color: var(--card-bg-color);
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    height: 70vh;
+    padding: 2rem;
+    background: var(--primary-dark) url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+    border-bottom: 2px solid var(--accent-color);
 }
-header h1 { margin: 0; font-size: 2.2em; }
-.subtitle { margin: 10px 0 0; opacity: 0.9; }
 
-/* --- Navegación por Pestañas --- */
-.tab-nav {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 30px;
-}
-.tab-btn {
-    padding: 12px 25px;
-    font-size: 1em;
+.hero-content h1 {
+    font-size: 4rem;
     font-weight: 700;
-    cursor: pointer;
+    color: #FFF;
+    text-shadow: 0 0 15px var(--glow-color);
+    margin-bottom: 1rem;
+}
+
+.hero-content .subtitle {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: var(--primary-dark);
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
     border: none;
-    border-radius: 8px;
-    background-color: var(--card-bg-color);
-    color: var(--secondary-color);
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-.tab-btn.active, .tab-btn:hover {
-    background-color: var(--secondary-color);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px var(--glow-color);
 }
 
-/* --- Contenido de Pestañas y Tarjetas --- */
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.card {
-    background-color: var(--card-bg-color);
-    border-radius: 12px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+.cta-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 0 35px var(--glow-color);
 }
-.card h2 { color: var(--primary-color); margin-top: 0; }
 
-/* --- Pestaña 1: Tabla --- */
-.table-container { overflow-x: auto; }
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    border: 1px solid #e0e0e0;
-    padding: 12px;
+/* --- Estilos de Secciones y Tarjetas --- */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #FFF;
+    margin-bottom: 2rem;
     text-align: left;
-    vertical-align: top;
 }
-th {
-    background-color: var(--primary-color);
-    color: white;
-    position: sticky;
-    top: 0;
-}
-tr:nth-child(even) { background-color: #f9f9f9; }
 
-/* --- Pestaña 2: Dashboard --- */
-#scada-selectors-chart {
+.section-title span {
+    color: var(--accent-color);
+    margin-right: 0.5rem;
+}
+
+.card-section {
+    background-color: var(--primary-dark);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    margin-top: 3rem;
+    border: 1px solid var(--secondary-dark);
+}
+
+/* --- Dashboard --- */
+.dashboard-controls {
     display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 30px;
     justify-content: center;
-}
-.chart-container { position: relative; height: 500px; }
-.selector-label {
-    display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 15px;
-    background-color: #e3f2fd;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
-.selector-label:hover { background-color: #bbdefb; }
 
-/* --- Pestaña 3: Ranking y Análisis --- */
-#ranking-container { display: flex; flex-direction: column; gap: 15px; }
-.rank-bar-container { display: flex; align-items: center; gap: 15px; }
-.rank-label { width: 250px; text-align: right; font-weight: bold; flex-shrink: 0; }
-.rank-bar {
-    height: 30px;
-    background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+.dashboard-controls label {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+#metric-selector {
+    background-color: var(--secondary-dark);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
     border-radius: 5px;
-    color: white;
+    border: 1px solid var(--accent-color);
+    cursor: pointer;
+}
+
+.chart-container {
+    height: 450px;
+}
+
+/* --- Tarjetas de Análisis --- */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.review-card {
+    background-color: var(--primary-dark);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--secondary-dark);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px var(--glow-color);
+    border-color: var(--accent-color);
+}
+
+.card-header {
+    padding: 1rem 1.5rem;
+    background-color: var(--secondary-dark);
+}
+
+.card-header h3 {
+    font-size: 1.5rem;
+    color: #FFF;
+    margin: 0;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-content h4 {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding-right: 10px;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: width 0.5s ease-in-out;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
-#pros-cons-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 20px;
+.pro-icon, .con-icon {
+    font-weight: 700;
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
 }
-.analysis-card { border-radius: 8px; padding: 20px; }
-.analysis-card h3 { margin-top: 0; }
-.analysis-card ul { padding-left: 25px; margin: 0; }
-.analysis-card li { padding-left: 10px; margin-bottom: 8px; }
+.pro-icon { color: var(--accent-color); }
+.con-icon { color: #FF4136; /* Rojo */ }
 
-.pros-card { background-color: #e8f5e9; border-left: 5px solid var(--success-color); }
-.pros-card h3 { color: var(--success-color); }
-.pros-card ul { list-style-type: '✅'; }
+.card-content ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+.card-content ul li {
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+}
+.card-content ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-weight: 700;
+}
 
-.cons-card { background-color: #ffebee; border-left: 5px solid var(--danger-color); }
-.cons-card h3 { color: var(--danger-color); }
-.cons-card ul { list-style-type: '❌'; }
+/* --- Conclusión y Footer --- */
+#conclusion .section-title { margin-bottom: 1.5rem; }
+.conclusion-box {
+    background-color: var(--secondary-dark);
+    border-left: 5px solid var(--accent-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    font-size: 1.2rem;
+}
 
+footer {
+    text-align: center;
+    padding: 3rem 1rem;
+    margin-top: 2rem;
+    color: var(--text-muted);
+}
+
+/* --- Animaciones --- */
+.animated {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.animated.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
