@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // --- ESTRUCTURA DE DATOS DETALLADA ---
+    // --- ESTRUCTURA DE DATOS COMPLETA Y DETALLADA ---
     const scadaData = [
         {
             id: 'zenon', name: 'Zenon COPADATA', logo_text: 'ZN',
@@ -16,8 +16,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 adaptacionMineria: { score: 5, compliance: 'Cumple', detail: 'Integración nativa con sistemas MES/ERP.' },
                 integracionSubs: { score: 5, compliance: 'Cumple', detail: 'Soporte nativo para todos los protocolos estándar.' },
                 funcionalidadesNativas: { score: 5, compliance: 'Cumple', detail: 'Plataforma unificada con GIS, Historian, etc.' },
-                tco: { score: 4, compliance: 'Cumple', detail: 'Bajo a medio, por ingeniería eficiente y licencias escalables.' },
-                tiempoImplementacion: { score: 4, compliance: 'Cumple', detail: 'Medio a corto, gracias a su configuración por parámetros.' }
+                tco: { score: 4, compliance: 'Cumple', detail: 'Bajo a medio, por ingeniería eficiente.' },
+                tiempoImplementacion: { score: 4, compliance: 'Cumple', detail: 'Medio a corto, por configuración paramétrica.' }
+            }
+        },
+        {
+            id: 'zee600', name: 'ZEE600 ABB (Zenon)', logo_text: 'Z600',
+            summary: 'Implementación de ABB de la plataforma Zenon. Comparte el núcleo tecnológico de COPA-DATA, beneficiándose de su robustez, aunque con consideraciones específicas de ciclo de vida y soporte.',
+            pros: ['Hereda la arquitectura robusta, escalabilidad y la excelente interfaz de Zenon.', 'Alta disponibilidad para acceso remoto (RDP).', 'Capacidad comprobada para implementar arquitecturas de alta redundancia.'],
+            cons: ['El ciclo de vida de las versiones opera con un desfase respecto a la versión principal de Zenon.', 'El soporte técnico es canalizado a través de COPA-DATA, sin un service desk primario de ABB.'],
+            scores: {
+                arquitectura: { score: 5, compliance: 'Cumple', detail: 'Hereda la arquitectura robusta y probada de Zenon.' },
+                redundancia: { score: 5, compliance: 'Cumple', detail: 'Soporte nativo para PRP/HSR, muy fiable.' },
+                escalabilidad: { score: 5, compliance: 'Cumple', detail: 'Excelente, desde sistemas locales a centros de control.' },
+                ciberseguridad: { score: 4, compliance: 'Cumple', detail: 'Soporte para IEC 62443 y Active Directory.' },
+                normaNTSyCS: { score: 4, compliance: 'Cumple', detail: 'Alineado a la norma, pero el desfase de versión es un riesgo.' },
+                interfaz: { score: 4, compliance: 'Cumple', detail: 'Moderna y flexible, aunque puede no tener las últimas features.' },
+                adaptacionMineria: { score: 5, compliance: 'Cumple', detail: 'Integración nativa con sistemas MES/ERP.' },
+                integracionSubs: { score: 5, compliance: 'Cumple', detail: 'Soporte nativo para todos los protocolos estándar.' },
+                funcionalidadesNativas: { score: 4, compliance: 'Cumple', detail: 'Plataforma unificada, pero puede carecer de las últimas funciones.' },
+                tco: { score: 4, compliance: 'Cumple', detail: 'Bajo a medio, por ingeniería eficiente.' },
+                tiempoImplementacion: { score: 4, compliance: 'Cumple', detail: 'Medio a corto, por configuración paramétrica.' }
             }
         },
         {
@@ -35,53 +54,129 @@ document.addEventListener('DOMContentLoaded', function () {
                 adaptacionMineria: { score: 3, compliance: 'Cumple', detail: 'Requiere personalización para integración completa.' },
                 integracionSubs: { score: 4, compliance: 'Cumple', detail: 'Alta compatibilidad con protocolos estándar de utilities.' },
                 funcionalidadesNativas: { score: 3, compliance: 'Cumple', detail: 'Set de funciones estándar para operación de redes.' },
-                tco: { score: 2, compliance: 'No Cumple', detail: 'Alto, debido a la necesidad de servicios especializados.' },
+                tco: { score: 2, compliance: 'No Cumple', detail: 'Alto, por necesidad de servicios especializados.' },
                 tiempoImplementacion: { score: 2, compliance: 'No Cumple', detail: 'Largo, por su alta complejidad de ingeniería.' }
+            }
+        },
+        {
+            id: 'adms', name: 'EcoStruxure ADMS', logo_text: 'ADMS',
+            summary: 'Plataforma de Schneider para la gestión avanzada de redes de distribución (ADMS). Su fortaleza reside en las aplicaciones analíticas, pero presenta debilidades en documentación y soporte.',
+            pros: ['Interfaz de control unificada.', 'Gestión de conmutación y notificaciones integradas.', 'Arquitectura modular orientada a utilities.'],
+            cons: ['Documentación técnica incompleta.', 'Soporte técnico reactivo, aumentando riesgos.', 'Bajo nivel de adaptación a procesos mineros.'],
+            scores: {
+                arquitectura: { score: 3, compliance: 'Cumple', detail: 'Modular pero con documentación deficiente.' },
+                redundancia: { score: 3, compliance: 'Cumple', detail: 'Funcionalidad estándar de servidores y datos.' },
+                escalabilidad: { score: 3, compliance: 'Cumple', detail: 'Modular, pero la expansión puede ser compleja.' },
+                ciberseguridad: { score: 3, compliance: 'Cumple', detail: 'Estándares de la industria, pero el soporte es un riesgo.' },
+                normaNTSyCS: { score: 3, compliance: 'Cumple', detail: 'Cumplimiento básico, pero el soporte reactivo es un riesgo.' },
+                interfaz: { score: 3, compliance: 'Cumple', detail: 'Panel de control unificado, experiencia de usuario estándar.' },
+                adaptacionMineria: { score: 2, compliance: 'No Cumple', detail: 'Bajo. Foco principal en utilities, no en minería.' },
+                integracionSubs: { score: 3, compliance: 'Cumple', detail: 'Integración estándar con protocolos comunes.' },
+                funcionalidadesNativas: { score: 3, compliance: 'Cumple', detail: 'Buen set de funciones para gestión de redes (DMS).' },
+                tco: { score: 3, compliance: 'Cumple', detail: 'Medio. Dependencia de expertos puede incrementar costos.' },
+                tiempoImplementacion: { score: 3, compliance: 'Cumple', detail: 'Medio. La falta de documentación puede causar retrasos.' }
+            }
+        },
+        {
+            id: 'spectrum', name: 'Siemens Spectrum Power', logo_text: 'SP',
+            summary: 'Solución integral de clase enterprise para la gestión de redes eléctricas, con un fuerte enfoque en Transmisión y Distribución. Es una plataforma potente pero de alta complejidad y costo.',
+            pros: ['Arquitectura modular, robusta y altamente escalable.', 'Elevados estándares de disponibilidad y ciberseguridad.', 'Capacidad gráfica avanzada y soporte global.'],
+            cons: ['La adaptación a la industria minera requiere un alto grado de personalización.', 'Costo Total de Propiedad (TCO) y tiempo de implementación elevados.', 'Alta complejidad de ingeniería.'],
+            scores: {
+                arquitectura: { score: 4, compliance: 'Cumple', detail: 'Muy robusta y escalable para redes eléctricas.' },
+                redundancia: { score: 4, compliance: 'Cumple', detail: 'Alta disponibilidad, estándar para utilities.' },
+                escalabilidad: { score: 4, compliance: 'Cumple', detail: 'Muy escalable por su diseño modular.' },
+                ciberseguridad: { score: 4, compliance: 'Cumple', detail: 'Seguridad de alto nivel.' },
+                normaNTSyCS: { score: 4, compliance: 'Cumple', detail: 'Cumple con los más altos estándares del sector energético.' },
+                interfaz: { score: 3, compliance: 'Cumple', detail: 'Estándar, enfocada en operadores de red.' },
+                adaptacionMineria: { score: 3, compliance: 'Cumple', detail: 'Requiere alta personalización.' },
+                integracionSubs: { score: 4, compliance: 'Cumple', detail: 'Alta compatibilidad con protocolos estándar.' },
+                funcionalidadesNativas: { score: 4, compliance: 'Cumple', detail: 'Completo set de funciones SCADA/EMS/DMS.' },
+                tco: { score: 1, compliance: 'No Cumple', detail: 'Muy alto, solución de clase enterprise.' },
+                tiempoImplementacion: { score: 1, compliance: 'No Cumple', detail: 'Muy largo, por su alta ingeniería.' }
+            }
+        },
+        {
+            id: 'epas', name: 'EPAS Gateway Schneider', logo_text: 'EPAS',
+            summary: 'Solución de gateway de comunicación, no un sistema SCADA completo. Es altamente escalable para gestión de protocolos pero carece de funcionalidades de control y visualización de alto nivel.',
+            pros: ['Arquitectura redundante fácil de aplicar.', 'Altamente escalable para múltiples protocolos y canales.', 'Interfaz de administración amigable (WebGAT).'],
+            cons: ['No es un sistema SCADA, sino un gateway.', 'Carece de protocolos de redundancia modernos (HSR/PRP).', 'La configuración de la base de datos es lenta y depende de software externo (PACIS).'],
+            scores: {
+                arquitectura: { score: 3, compliance: 'Cumple', detail: 'Modular y escalable para su función de gateway.' },
+                redundancia: { score: 2, compliance: 'No Cumple', detail: 'No soporta HSR/PRP, una desventaja crítica.' },
+                escalabilidad: { score: 3, compliance: 'Cumple', detail: 'Excelente escalabilidad como gateway de protocolos.' },
+                ciberseguridad: { score: 3, compliance: 'Cumple', detail: 'Seguridad estándar para un gateway.' },
+                normaNTSyCS: { score: 2, compliance: 'No Cumple', detail: 'No está diseñado para cumplir como sistema de control.' },
+                interfaz: { score: 2, compliance: 'No Cumple', detail: 'Configuración de BBDD lenta y dependiente.' },
+                adaptacionMineria: { score: 1, compliance: 'No Cumple', detail: 'Inadecuado. No es un sistema de control de operaciones.' },
+                integracionSubs: { score: 4, compliance: 'Cumple', detail: 'Excelente como concentrador de protocolos.' },
+                funcionalidadesNativas: { score: 1, compliance: 'No Cumple', detail: 'Funciones limitadas a gateway, sin HMI/SCADA avanzado.' },
+                tco: { score: 3, compliance: 'Cumple', detail: 'Medio, considerando su función específica.' },
+                tiempoImplementacion: { score: 3, compliance: 'Cumple', detail: 'Medio, dependiente de la complejidad de protocolos.' }
             }
         },
         {
             id: 'poweroperation', name: 'Power Operation Schneider', logo_text: 'PSO',
             summary: 'Plataforma SCADA de Schneider Electric para gestión de energía. Los datos analizados revelan deficiencias significativas en fiabilidad y usabilidad, constituyendo una opción de alto riesgo.',
-            pros: ['Flexibilidad de acceso remoto mediante cliente pesado, cliente web y Power SCADA Anywhere.'],
-            cons: ['Fallas críticas reportadas en la configuración de la redundancia.', 'Inestabilidad del sistema atribuida a la generación excesiva de logs.', 'Herramienta de desarrollo HMI calificada como deficiente y propensa a errores.', 'Dependencia crítica de software obsoleto (MS Excel 2016).'],
+            pros: ['Flexibilidad de acceso remoto.'],
+            cons: ['Fallas críticas reportadas en la configuración de la redundancia.', 'Inestabilidad del sistema atribuida a la generación excesiva de logs.', 'Herramienta de desarrollo HMI deficiente y con errores.', 'Dependencia crítica de software obsoleto (MS Excel 2016).'],
             scores: {
                 arquitectura: { score: 1, compliance: 'No Cumple', detail: 'Presenta problemas críticos de redundancia.' },
                 redundancia: { score: 1, compliance: 'No Cumple', detail: 'Fallas reportadas, no se logra configurar. No fiable.' },
                 escalabilidad: { score: 2, compliance: 'No Cumple', detail: 'Problemática, generación excesiva de logs causa fallas.' },
                 ciberseguridad: { score: 3, compliance: 'Cumple', detail: 'Nivel estándar, pero la inestabilidad es un riesgo.' },
-                normaNTSyCS: { score: 2, compliance: 'No Cumple', detail: 'Alineamiento parcial; la inestabilidad del sistema es un riesgo.' },
+                normaNTSyCS: { score: 2, compliance: 'No Cumple', detail: 'Alineamiento parcial; la inestabilidad es un riesgo.' },
                 interfaz: { score: 1, compliance: 'No Cumple', detail: 'Herramienta de desarrollo HMI deficiente y con errores.' },
                 adaptacionMineria: { score: 2, compliance: 'No Cumple', detail: 'Baja, opción riesgosa por su inestabilidad.' },
                 integracionSubs: { score: 3, compliance: 'Cumple', detail: 'Integración estándar con protocolos comunes.' },
                 funcionalidadesNativas: { score: 2, compliance: 'No Cumple', detail: 'Set de funciones básico, con limitaciones reportadas.' },
-                tco: { score: 2, compliance: 'No Cumple', detail: 'Medio-Alto, considerando los costos de mitigación de riesgos.' },
-                tiempoImplementacion: { score: 2, compliance: 'No Cumple', detail: 'Largo, por dificultades en configuración y desarrollo.' }
+                tco: { score: 2, compliance: 'No Cumple', detail: 'Medio-Alto, considerando costos de mitigación.' },
+                tiempoImplementacion: { score: 2, compliance: 'No Cumple', detail: 'Largo, por dificultades en configuración.' }
             }
         }
-        // ... (resto de los objetos de datos omitidos por brevedad, pero seguirían la misma estructura) ...
     ];
     const features = {
         arquitectura: 'Arquitectura', redundancia: 'Redundancia', escalabilidad: 'Escalabilidad', ciberseguridad: 'Ciberseguridad', normaNTSyCS: 'Cumplimiento Norma NTSyCS',
         interfaz: 'Interfaz de Usuario', adaptacionMineria: 'Adaptación a Minería', integracionSubs: 'Integración de Subs.',
         funcionalidadesNativas: 'Funcionalidades Nativas', tco: 'Costo Total (TCO)', tiempoImplementacion: 'Tiempo de Implementación'
     };
-
-    // --- CÁLCULO DE RANKING ---
+    
+    // --- LÓGICA DE LA APLICACIÓN ---
+    
+    // CÁLCULO DE RANKING (CORREGIDO)
     const rankedScada = scadaData.map(scada => {
         const scores = Object.values(scada.scores).map(s => s.score);
         const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
         return { ...scada, averageScore };
     }).sort((a, b) => b.averageScore - a.averageScore);
+    
+    let radarChart = null; // Variable global para la instancia del gráfico
 
-    // --- INICIALIZACIÓN GENERAL ---
+    // FUNCIÓN DE INICIALIZACIÓN PRINCIPAL
     function initialize() {
         initNavigation();
         initMatrix();
         initAnalisis();
         initRanking();
     }
-    
-    // --- PÁGINA: MATRIZ (Lógica Actualizada) ---
+
+    // NAVEGACIÓN
+    function initNavigation() {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                pages.forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+                navLinks.forEach(n => n.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    }
+
+    // PÁGINA: MATRIZ
     function initMatrix() {
         const matrixTable = document.getElementById('comparison-matrix');
         const filterContainer = document.getElementById('scada-filter-container');
@@ -114,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         matrixTable.innerHTML = `<thead>${headerRow}</thead><tbody>${bodyHtml}</tbody>`;
         
-        // Adjuntar event listeners después de crear el contenido
         document.querySelectorAll('.scada-filter-cb').forEach(cb => cb.addEventListener('change', updateMatrixVisibility));
         document.querySelectorAll('#comparison-matrix tbody tr').forEach(row => {
             row.addEventListener('click', () => {
@@ -125,38 +219,167 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- PÁGINA: ANÁLISIS DETALLADO (Lógica Actualizada) ---
-    function updateRadarChart(systemIds, criteriaKeys) {
-        if(radarChart) radarChart.destroy();
-        if (systemIds.length === 0 || criteriaKeys.length === 0) return;
-        const ctx = document.getElementById('radar-chart').getContext('2d');
-        const datasets = scadaData.filter(s => systemIds.includes(s.id)).map((scada, index) => ({
-            label: scada.name,
-            data: criteriaKeys.map(key => scada.scores[key].score), // **Acceso al score anidado**
-            backgroundColor: ['rgba(0, 255, 127, 0.4)', 'rgba(0, 191, 255, 0.4)', 'rgba(255, 215, 0, 0.4)'][index],
-            borderColor: ['#00FF7F', '#00BFFF', '#FFD700'][index],
-            borderWidth: 2,
-        }));
-        radarChart = new Chart(ctx, { type: 'radar', data: { labels: criteriaKeys.map(key => features[key]), datasets }, options: { /* Opciones... */ } });
+    function updateMatrixVisibility() {
+        const visibleScadaIds = Array.from(document.querySelectorAll('.scada-filter-cb:checked')).map(cb => cb.value);
+        document.querySelectorAll('#comparison-matrix th, #comparison-matrix td').forEach(cell => {
+            const scadaId = cell.getAttribute('data-scada-id');
+            if (scadaId) {
+                cell.style.display = visibleScadaIds.includes(scadaId) ? '' : 'none';
+            }
+        });
+        const selectedRow = document.querySelector('#comparison-matrix tbody tr.selected');
+        if (selectedRow) {
+            updateFeaturesSidebar(selectedRow.getAttribute('data-feature-key'));
+        }
     }
 
-    // El resto de las funciones (initNavigation, initAnalisis, initRanking, etc.) permanecen sin cambios estructurales
-    // Se omite su código duplicado por brevedad, pero la lógica completa de la versión anterior sigue siendo válida.
-    // La única corrección crítica es el acceso a `scada.scores[key].score` en el radar.
+    function updateFeaturesSidebar(featureKey) {
+        const contentEl = document.getElementById('features-content');
+        if (!featureKey) {
+            contentEl.innerHTML = '<p>Seleccione una fila para visualizar detalles.</p>';
+            return;
+        }
+        let content = `<h3><span class="accent">//</span> ${features[featureKey]}</h3>`;
+        const visibleScadaIds = Array.from(document.querySelectorAll('.scada-filter-cb:checked')).map(cb => cb.value);
+        scadaData.filter(s => visibleScadaIds.includes(s.id)).forEach(scada => {
+            const item = scada.scores[featureKey];
+            content += `<h4>${scada.name}</h4>
+                        <p><strong>Puntuación: ${item.score}/5 (${item.compliance})</strong></p>
+                        <p>${item.detail}</p>`;
+        });
+        contentEl.innerHTML = content;
+    }
+
+    // PÁGINA: ANÁLISIS DETALLADO
+    function initAnalisis() {
+        const radarSystemsSelector = document.getElementById('radar-systems-selector');
+        const criteriaCheckboxesContainer = document.getElementById('criteria-checkboxes');
+        
+        scadaData.forEach(s => {
+            radarSystemsSelector.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+        });
+        Object.keys(features).forEach(key => {
+            criteriaCheckboxesContainer.innerHTML += `<label><input type="checkbox" class="criteria-cb" value="${key}" checked> ${features[key]}</label>`;
+        });
+
+        radarSystemsSelector.addEventListener('change', updateAnalisisPage);
+        document.querySelectorAll('.criteria-cb').forEach(cb => cb.addEventListener('change', updateAnalisisPage));
+        
+        radarSystemsSelector.options[0].selected = true;
+        updateAnalisisPage();
+    }
+
+    function updateAnalisisPage() {
+        const selectedSystemIds = Array.from(document.getElementById('radar-systems-selector').selectedOptions).map(opt => opt.value).slice(0, 3);
+        const selectedCriteriaKeys = Array.from(document.querySelectorAll('.criteria-cb:checked')).map(cb => cb.value);
+        
+        updateRadarChart(selectedSystemIds, selectedCriteriaKeys);
+        
+        if (selectedSystemIds.length > 0) {
+            updateFichaTecnica(selectedSystemIds[0]);
+        } else {
+            document.getElementById('ficha-tecnica').innerHTML = '<p style="text-align: center; padding: 2rem;">Seleccione un sistema para visualizar su ficha técnica.</p>';
+        }
+    }
     
-    // El código completo de la versión anterior, con esta corrección, es lo que se debe usar.
-    // Esta respuesta se enfoca en mostrar los cambios solicitados.
+    function updateRadarChart(systemIds, criteriaKeys) {
+        const ctx = document.getElementById('radar-chart').getContext('2d');
+        const radarColors = ['rgba(0, 255, 127, 0.4)', 'rgba(0, 191, 255, 0.4)', 'rgba(255, 215, 0, 0.4)'];
+        const radarBorderColors = ['#00FF7F', '#00BFFF', '#FFD700'];
 
-    // Llamada a la inicialización
+        if (radarChart) {
+            radarChart.destroy();
+        }
+
+        if (systemIds.length === 0 || criteriaKeys.length === 0) {
+            return;
+        }
+
+        const datasets = scadaData.filter(s => systemIds.includes(s.id)).map((scada, index) => ({
+            label: scada.name,
+            data: criteriaKeys.map(key => scada.scores[key].score),
+            backgroundColor: radarColors[index],
+            borderColor: radarBorderColors[index],
+            borderWidth: 2,
+            pointBackgroundColor: radarBorderColors[index]
+        }));
+        
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: criteriaKeys.map(key => features[key]),
+                datasets: datasets
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'top', labels: { color: '#FFF', font: { size: 14 } } } },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        pointLabels: { color: '#FFF', font: { size: 12 } },
+                        suggestedMin: 0, suggestedMax: 5,
+                        ticks: { backdropColor: 'transparent', color: '#FFF', stepSize: 1 }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateFichaTecnica(scadaId) {
+        const scada = scadaData.find(s => s.id === scadaId);
+        const fichaEl = document.getElementById('ficha-tecnica');
+        const prosHtml = scada.pros.map(p => `<li>${p}</li>`).join('');
+        const consHtml = scada.cons.map(c => `<li>${c}</li>`).join('');
+
+        fichaEl.innerHTML = `
+            <div class="ficha-header">
+                <div class="ficha-logo">${scada.logo_text}</div>
+                <h2>${scada.name}</h2>
+            </div>
+            <p class="ficha-summary">${scada.summary}</p>
+            <div class="ficha-section">
+                <h4><span class="accent">//</span> Ventajas Clave</h4>
+                <ul class="pros-list">${prosHtml}</ul>
+            </div>
+            <div class="ficha-section">
+                <h4><span class="accent">//</span> Puntos a Considerar</h4>
+                <ul class="cons-list">${consHtml}</ul>
+            </div>`;
+    }
+
+    // PÁGINA: RANKING
+    function initRanking() {
+        const listContainer = document.getElementById('ranked-list');
+        listContainer.innerHTML = '';
+        rankedScada.forEach((scada, index) => {
+            let analysis = '';
+            if (index <= 1) analysis = 'Líder en rendimiento, destacando en flexibilidad, fiabilidad y adaptación.';
+            else if (scada.averageScore >= 3.5) analysis = 'Competidor robusto con fortalezas en áreas específicas como la redundancia.';
+            else if (scada.averageScore >= 2.5) analysis = 'Opción de nivel medio, requiere análisis de costo-beneficio para casos de uso específicos.';
+            else analysis = 'Presenta deficiencias o limitaciones funcionales, considerado de alto riesgo para operaciones críticas.';
+
+            listContainer.innerHTML += `
+                <div class="ranked-item">
+                    <div class="rank-position">#${index + 1}</div>
+                    <div class="rank-details">
+                        <h4>${scada.name}</h4>
+                        <div class="score">Puntuación Promedio: ${scada.averageScore.toFixed(2)} / 5.00</div>
+                        <p>${analysis}</p>
+                    </div>
+                </div>`;
+        });
+
+        document.getElementById('export-pdf-btn').addEventListener('click', () => {
+             const element = document.getElementById('ranking-export-container');
+             const opt = {
+                 margin: 0.5, filename: 'Conclusion_Ejecutiva_SCADA.pdf', image: { type: 'jpeg', quality: 0.98 },
+                 html2canvas: { scale: 2, backgroundColor: '#1A1A1A' }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+             };
+             html2pdf().set(opt).from(element).save();
+        });
+    }
+
+    // INVOCACIÓN INICIAL
     initialize();
-
-    // Declaraciones completas de funciones omitidas para brevedad
-    function initNavigation() { /* ... */ }
-    let radarChart = null;
-    function initAnalisis() { /* ... */ }
-    function updateAnalisisPage() { /* ... */ }
-    function updateFichaTecnica(scadaId) { /* ... */ }
-    function initRanking() { /* ... */ }
-    function updateMatrixVisibility() { /* ... */ }
-    function updateFeaturesSidebar(featureKey) { /* ... */ }
 });
