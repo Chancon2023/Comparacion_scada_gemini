@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCADA Command Center // Elite Analysis v3.0</title>
+    <title>SCADA Command Center // Final Version</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -23,38 +23,41 @@
 
         <main class="main-content">
             <div id="inicio" class="page active">
-                <header class="page-header">
+                 <header class="page-header">
                     <h1>Matriz Comparativa</h1>
                     <p>Filtra sistemas y selecciona criterios para un análisis detallado.</p>
                 </header>
-                <div class="filter-controls" id="scada-filter-container">
-                    </div>
+                <div class="filter-controls" id="scada-filter-container"></div>
                 <div class="matrix-container">
                     <div class="matrix-table-wrapper">
-                        <table id="comparison-matrix">
-                            </table>
+                        <table id="comparison-matrix"></table>
                     </div>
                     <aside class="features-sidebar" id="features-sidebar">
                         <h3><span class="accent">//</span> Detalles del Criterio</h3>
-                        <div id="features-content">
-                            <p>Selecciona una fila en la matriz para ver detalles.</p>
-                        </div>
+                        <div id="features-content"><p>Selecciona una fila en la matriz para ver detalles.</p></div>
                     </aside>
                 </div>
             </div>
 
             <div id="analisis" class="page">
                 <header class="page-header">
-                    <h1>Análisis Detallado por Plataforma</h1>
-                    <p>Selecciona un sistema para ver su perfil de rendimiento y ficha técnica.</p>
+                    <h1>Análisis de Rendimiento</h1>
+                    <p>Compara perfiles y revisa la ficha técnica de cada plataforma.</p>
                 </header>
-                <div class="analisis-controls">
-                    <label for="analisis-selector">Seleccionar Plataforma:</label>
-                    <select id="analisis-selector"></select>
-                </div>
-                <div class="analisis-container">
+                <div class="analisis-main-grid">
+                    <div class="analisis-controls-wrapper">
+                        <h3><span class="accent">//</span> Controles de Radar</h3>
+                        <div class="control-group">
+                            <label for="radar-systems-selector">Comparar Sistemas (máx. 3):</label>
+                            <select id="radar-systems-selector" multiple></select>
+                        </div>
+                        <div class="control-group">
+                            <label>Seleccionar Criterios:</label>
+                            <div class="criteria-checkboxes" id="criteria-checkboxes">
+                                </div>
+                        </div>
+                    </div>
                     <div class="chart-wrapper radar-wrapper">
-                         <h3><span class="accent">//</span> Perfil de Rendimiento</h3>
                         <canvas id="radar-chart"></canvas>
                     </div>
                     <div class="ficha-tecnica" id="ficha-tecnica">
@@ -67,21 +70,19 @@
                     <h1>Ranking y Veredicto Final</h1>
                     <p>Conclusión basada en el análisis de datos para operaciones mineras.</p>
                 </header>
-                <div class="ranking-container">
-                    <div id="conclusion-content">
-                        <h2><span class="accent">🏆</span> Campeón para Minería: Zenon Energy Edition (NCS)</h2>
-                        <p>Tras un análisis exhaustivo de todas las plataformas, <strong>Zenon Energy Edition</strong> se consolida como la solución superior para entornos mineros de alta exigencia. Su arquitectura unificada y rendimiento probado en campo le otorgan una ventaja decisiva.</p>
-                        <h3>Factores Clave de la Victoria:</h3>
-                        <ul>
-                            <li><strong>Rendimiento Superior (Puntuación: 4.6/5):</strong> Demuestra la mayor robustez en escalabilidad, redundancia y una interfaz de usuario altamente funcional, minimizando los puntos de fallo.</li>
-                            <li><strong>Enfoque Especializado (Puntuación: 5/5):</strong> Su alta capacidad de adaptación a operaciones mineras (MES, mantenimiento, etc.) es nativa, no un añadido. Esto reduce drásticamente el tiempo y costo de implementación.</li>
-                            <li><strong>Eficiencia y TCO (Puntuación: 4/5):</strong> Su bajo Costo Total de Propiedad (TCO) se debe a una ingeniería sin programación y una compatibilidad de versiones que evita costosas migraciones.</li>
-                        </ul>
-                        <h3>Conclusión Final:</h3>
-                        <p>Para operaciones donde el tiempo de actividad es crítico y la integración con sistemas de producción es fundamental, <strong>Zenon</strong> no es solo una opción, es la inversión estratégica para garantizar el control y la eficiencia operativa.</p>
-                    </div>
-                    <button id="export-pdf-btn" class="cta-button">Exportar Veredicto a PDF</button>
+                <div class="ranking-container" id="conclusion-content">
+                    <h2><span class="accent">🏆</span> Campeón para Minería: Zenon Energy Edition (NCS)</h2>
+                    <p>Tras un análisis exhaustivo, <strong>Zenon Energy Edition</strong> se consolida como la solución superior para entornos mineros de alta exigencia.</p>
+                    <h3>Factores Clave de la Victoria:</h3>
+                    <ul>
+                        <li><strong>Rendimiento Superior:</strong> La mayor robustez en escalabilidad, redundancia y una interfaz funcional.</li>
+                        <li><strong>Enfoque Especializado:</strong> Su alta capacidad de adaptación a operaciones mineras es nativa, no un añadido.</li>
+                        <li><strong>Eficiencia y TCO:</strong> Bajo Costo Total de Propiedad gracias a una ingeniería eficiente y compatibilidad entre versiones.</li>
+                    </ul>
+                    <h3>Conclusión Final:</h3>
+                    <p>Para operaciones críticas, <strong>Zenon</strong> es la inversión estratégica para garantizar el control y la eficiencia operativa.</p>
                 </div>
+                <button id="export-pdf-btn" class="cta-button">Exportar Veredicto a PDF</button>
             </div>
         </main>
     </div>
