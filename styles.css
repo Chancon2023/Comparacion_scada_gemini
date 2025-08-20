@@ -10,9 +10,28 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); co
 .app-container { display: flex; }
 /* --- Sidebar & Main Content --- */
 .sidebar { width: var(--sidebar-width); height: 100vh; background-color: var(--primary-dark); border-right: 1px solid var(--secondary-dark); position: fixed; top: 0; left: 0; padding: 1.5rem 0; }
-.sidebar-header { text-align: center; margin-bottom: 3rem; padding: 0 1rem; }
-.sidebar-header h2 { font-size: 2rem; color: #FFF; }
-.sidebar-header h2 span { color: var(--accent-color); }
+
+/* --- SECCIÓN MODIFICADA --- */
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 0 1rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--secondary-dark);
+}
+.sidebar-header h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #FFF;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 0;
+}
+.sidebar-header h2 span {
+    font-weight: 400;
+    color: var(--accent-color);
+}
+/* --- FIN DE SECCIÓN MODIFICADA --- */
+
 .sidebar ul { list-style: none; }
 .sidebar .nav-link { display: block; color: var(--text-muted); text-decoration: none; font-size: 1.1rem; font-weight: 600; padding: 1rem 2rem; margin: 0.5rem 0; border-left: 4px solid transparent; transition: all 0.3s ease; }
 .sidebar .nav-link:hover { background-color: var(--secondary-dark); color: #FFF; }
@@ -77,4 +96,3 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); co
 .rank-details .score { font-size: 1rem; color: var(--text-muted); font-style: italic; margin-bottom: 0.5rem; }
 .cta-button { display: inline-block; background-color: var(--accent-color); color: var(--primary-dark); font-size: 1.1rem; font-weight: 600; text-decoration: none; padding: 0.8rem 2rem; border-radius: 50px; border: none; transition: all 0.3s ease; box-shadow: 0 0 15px var(--glow-color); cursor: pointer; margin-top: 2rem; }
 .cta-button:hover { transform: translateY(-3px) scale(1.03); }
-
