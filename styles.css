@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 :root {
     --bg-color: #121212; --primary-dark: #1A1A1A; --secondary-dark: #2C2C2C;
     --accent-color: #00FF7F; --text-color: #E0E0E0; --text-muted: #A0A0E0;
-    --glow-color: rgba(0, 255, 127, 0.5); --border-radius: 10px; --sidebar-width: 250px;
+    --glow-color: rgba(0, 255, 127, 0.5); --border-radius: 10px; --sidebar-width: 260px;
     --color-cumple: #00FF7F; --color-no-cumple: #FF4136;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
 .app-container { display: flex; }
 
-/* --- Barra Lateral Corregida --- */
+/* --- Barra Lateral con Nuevo Diseño --- */
 .sidebar {
     width: var(--sidebar-width);
     height: 100vh;
@@ -20,48 +20,66 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); co
     left: 0;
     display: flex;
     flex-direction: column;
+    padding: 1.5rem;
 }
 .sidebar-header {
-    padding: 2rem 1rem;
-    text-align: center;
-    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--secondary-dark);
 }
-.sidebar-header h2 {
-    font-size: 2rem;
-    font-weight: 700;
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    background-color: var(--accent-color);
+    border-radius: 8px;
+    /* Simulación del ícono geométrico */
+    background-image: 
+        linear-gradient(45deg, var(--primary-dark) 25%, transparent 25%), 
+        linear-gradient(-45deg, var(--primary-dark) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--primary-dark) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--primary-dark) 75%);
+    background-size: 18px 18px;
+    background-position: 0 0, 0 0, 18px 18px, 18px 18px;
+}
+.logo span {
+    font-size: 1.8rem;
+    font-weight: 600;
     color: #FFF;
-    letter-spacing: 1px;
-    margin: 0;
-}
-.sidebar-header h2 span {
-    font-weight: 400;
-    color: var(--accent-color);
 }
 .sidebar ul {
     list-style: none;
-    padding-top: 1.5rem;
-    margin-top: 1.5rem;
-    border-top: 1px solid var(--secondary-dark);
-    flex-grow: 1;
 }
 .sidebar .nav-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 1rem;
+    border-radius: 8px;
     margin: 0.5rem 0;
-    border-left: 4px solid transparent;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease-in-out;
 }
-.sidebar .nav-link:hover { background-color: var(--secondary-dark); color: #FFF; }
-.sidebar .nav-link.active {
+.sidebar .nav-link:hover {
+    background-color: var(--secondary-dark);
     color: #FFF;
-    border-left-color: var(--accent-color);
-    background: linear-gradient(90deg, var(--secondary-dark) 0%, transparent 100%);
 }
-.sidebar .nav-link span { display: block; }
+.sidebar .nav-link.active {
+    background-color: var(--accent-color);
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+.nav-icon { font-size: 1.2rem; }
 
 /* --- Contenido Principal --- */
 .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); padding: 2rem 3rem; }
@@ -123,3 +141,4 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); co
 .rank-details .score { font-size: 1rem; color: var(--text-muted); font-style: italic; margin-bottom: 0.5rem; }
 .cta-button { display: inline-block; background-color: var(--accent-color); color: var(--primary-dark); font-size: 1.1rem; font-weight: 600; text-decoration: none; padding: 0.8rem 2rem; border-radius: 50px; border: none; transition: all 0.3s ease; box-shadow: 0 0 15px var(--glow-color); cursor: pointer; margin-top: 2rem; }
 .cta-button:hover { transform: translateY(-3px) scale(1.03); }
+
