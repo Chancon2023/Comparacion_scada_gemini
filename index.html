@@ -31,7 +31,71 @@
         </nav>
 
         <main class="main-content">
-           </main>
+            <div id="inicio" class="page active">
+                 <header class="page-header">
+                    <h1>Matriz de Evaluación Técnica</h1>
+                    <p>Filtre sistemas y seleccione criterios para un análisis granular.</p>
+                </header>
+                <div class="filter-controls" id="scada-filter-container"></div>
+                <div class="matrix-container">
+                    <div class="matrix-table-wrapper">
+                        <table id="comparison-matrix"></table>
+                    </div>
+                    <aside class="features-sidebar" id="features-sidebar">
+                        <h3><span class="accent">//</span> Detalles del Criterio</h3>
+                        <div id="features-content"><p>Seleccione una fila para visualizar detalles.</p></div>
+                    </aside>
+                </div>
+            </div>
+
+            <div id="analisis" class="page">
+                <header class="page-header">
+                    <h1>Análisis de Perfil Técnico</h1>
+                    <p>Seleccione plataformas y criterios para visualizar la comparativa de rendimiento.</p>
+                </header>
+                <div class="analisis-main-grid">
+                    <div class="analisis-controls-wrapper">
+                        <h3><span class="accent">//</span> Parámetros de Visualización</h3>
+                        <div class="control-group">
+                            <label>Seleccionar Plataformas (máx. 3):</label>
+                            <div class="pills-container" id="platform-selector-pills"></div>
+                        </div>
+                        <div class="control-group">
+                            <label>Seleccionar Criterios de Evaluación:</label>
+                            <div class="pills-container criteria-pills" id="criteria-selector-pills"></div>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper radar-wrapper">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
+                    <div class="ficha-tecnica" id="ficha-tecnica"></div>
+                </div>
+            </div>
+            
+            <div id="ranking" class="page">
+                <header class="page-header">
+                    <h1>Clasificación y Conclusión Ejecutiva</h1>
+                    <p>Resultados finales basados en la puntuación ponderada de los criterios evaluados.</p>
+                </header>
+                <div id="ranking-export-container">
+                    <div class="ranking-layout">
+                        <div class="ranked-list-container">
+                             <h3><span class="accent">//</span> Clasificación por Rendimiento</h3>
+                            <div id="ranked-list"></div>
+                        </div>
+                        <div class="conclusion-container">
+                            <h3><span class="accent">//</span> Conclusión Ejecutiva</h3>
+                            <p>El análisis cuantitativo, derivado de 11 criterios técnicos, posiciona a <strong>Zenon Energy Edition (NCS)</strong> como la plataforma con el rendimiento más alto y equilibrado para aplicaciones industriales críticas, particularmente en el sector minero.</p>
+                            <p>Su superioridad se fundamenta en una arquitectura nativamente integrada, alta fiabilidad en mecanismos de redundancia y una escalabilidad probada en campo. Estos factores, combinados con un Costo Total de Propiedad (TCO) competitivo, minimizan los riesgos de implementación y aseguran la continuidad operacional.</p>
+                            <p>Plataformas como <strong>MicroScada X</strong> demuestran alta competencia en áreas específicas como la redundancia, pero presentan una menor flexibilidad y adaptabilidad nativa. En el extremo inferior, soluciones como <strong>Power Operation</strong> y <strong>EPAS Gateway</strong> exhiben deficiencias críticas o limitaciones funcionales, representando un riesgo operativo para entornos de alta exigencia.</p>
+                            <h4>Recomendación Final:</h4>
+                            <p>Se recomienda la adopción de <strong>Zenon Energy Edition (NCS)</strong> como solución estándar para nuevos proyectos, dada su alineación superior con los requerimientos de fiabilidad, integración y eficiencia a largo plazo.</p>
+                        </div>
+                    </div>
+                </div>
+                <button id="export-pdf-btn" class="cta-button">Exportar Conclusión a PDF</button>
+            </div>
+        </main>
     </div>
 
     <div class="chatbot-container">
@@ -41,10 +105,10 @@
                 <button class="chat-close-btn" id="chat-close-btn">&times;</button>
             </div>
             <div class="chat-body" id="chat-body">
-                <div class="chat-message bot">Hola, soy tu asistente especialista en SCADA. ¿En qué puedo ayudarte?</div>
+                <div class="chat-message bot">Hola, soy su asistente especialista en SCADA. ¿En qué puedo asistirle?</div>
             </div>
             <div class="chat-footer">
-                <input type="text" id="chat-input" placeholder="Escribe tu pregunta...">
+                <input type="text" id="chat-input" placeholder="Escriba su consulta...">
                 <button id="chat-send-btn">Enviar</button>
             </div>
         </div>
@@ -52,6 +116,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9.4 12.4l-1.4-1.4-1.4 1.4-1.2-1.2 1.4-1.4-1.4-1.4 1.2-1.2 1.4 1.4 1.4-1.4 1.2 1.2-1.4 1.4 1.4 1.4zm6 0l-1.4-1.4-1.4 1.4-1.2-1.2 1.4-1.4-1.4-1.4 1.2-1.2 1.4 1.4 1.4-1.4 1.2 1.2-1.4 1.4 1.4 1.4z"></path></svg>
         </button>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
