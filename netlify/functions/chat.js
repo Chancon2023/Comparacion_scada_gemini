@@ -1,113 +1,146 @@
 // Archivo: netlify/functions/chat.js
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, TaskType } from "@google/generative-ai";
 import fs from 'fs';
 import path from 'path';
 
-// Accede a tu API key desde las variables de entorno de Netlify
+// --- CONFIGURACIÓN INICIAL ---
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const embeddingModel = genAI.getGenerativeModel({ model: "text-embedding-004" });
+const generativeModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
-// --- PASO 2: "EL BIBLIOTECARIO" - LEER LA BASE DE CONOCIMIENTOS ---
-// Esta parte del código lee todos los archivos .txt de tu "biblioteca"
-// y los carga en memoria para poder buscarlos después.
-const knowledgeBasePath = path.join(process.cwd(), 'knowledge_base');
-const knowledgeBase = [];
+// --- BIBLIOTECA INTELIGENTE (VECTOR STORE) ---
+// Aquí guardaremos los textos de nuestros documentos y sus "coordenadas" (embeddings).
+let knowledgeBase = []; 
 
-try {
-    const files = fs.readdirSync(knowledgeBasePath);
-    files.forEach(file => {
-        if (file.endsWith('.txt')) {
-            const content = fs.readFileSync(path.join(knowledgeBasePath, file), 'utf-8');
-            knowledgeBase.push(content);
-        }
-    });
-    console.log(`Biblioteca cargada: ${knowledgeBase.length} documentos encontrados.`);
-} catch (error) {
-    console.error("Error al cargar la biblioteca de conocimientos:", error);
+// --- FUNCIÓN PARA CALCULAR LA "DISTANCIA" ENTRE IDEAS ---
+// Esto nos ayuda a ver qué tan relacionadas están la pregunta y un párrafo.
+function calculateCosineSimilarity(vecA, vecB) {
+    let dotProduct = 0.0;
+    let normA = 0.0;
+    let normB = 0.0;
+    for (let i = 0; i < vecA.length; i++) {
+        dotProduct += vecA[i] * vecB[i];
+        normA += vecA[i] * vecA[i];
+        normB += vecB[i] * vecB[i];
+    }
+    return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-// --- PASO 3: "EL BUSCADOR" - ENCONTRAR LA INFORMACIÓN RELEVANTE ---
-// Esta función es un buscador simple basado en palabras clave.
-// Busca en la biblioteca los fragmentos que mejor coincidan con la pregunta.
-function searchKnowledgeBase(query) {
-    const queryWords = query.toLowerCase().split(/\s+/);
-    let bestMatch = { content: null, score: 0 };
+// --- FUNCIÓN PARA PREPARAR LA BIBLIOTECA (SE EJECUTA UNA VEZ) ---
+async function setupKnowledgeBase() {
+    // Si la biblioteca ya está llena, no hacemos nada.
+    if (knowledgeBase.length > 0) return;
 
-    knowledgeBase.forEach(content => {
-        let score = 0;
-        const contentLower = content.toLowerCase();
-        queryWords.forEach(word => {
-            if (contentLower.includes(word)) {
-                score++;
+    try {
+        const knowledgeBasePath = path.join(process.cwd(), 'knowledge_base');
+        const files = fs.readdirSync(knowledgeBasePath);
+        
+        console.log(`Iniciando la creación de la biblioteca con ${files.length} archivos...`);
+        
+        for (const file of files) {
+            if (file.endsWith('.txt')) {
+                const content = fs.readFileSync(path.join(knowledgeBasePath, file), 'utf-8');
+                // 1. Dividimos el documento en párrafos (chunks)
+                const chunks = content.split(/\n\s*\n/).filter(chunk => chunk.trim().length > 10);
+                
+                // 2. Creamos un embedding para cada párrafo
+                const result = await embeddingModel.batchEmbedContents({
+                    requests: chunks.map(chunk => ({
+                        content: { parts: [{ text: chunk }] },
+                        taskType: TaskType.RETRIEVAL_DOCUMENT
+                    }))
+                });
+                
+                const embeddings = result.embeddings;
+                embeddings.forEach((embedding, index) => {
+                    // 3. Guardamos el párrafo y su "coordenada" en nuestra biblioteca
+                    knowledgeBase.push({
+                        text: chunks[index],
+                        embedding: embedding.values,
+                    });
+                });
             }
-        });
-
-        if (score > bestMatch.score) {
-            bestMatch = { content, score };
         }
-    });
-
-    // Solo devolvemos el contenido si tiene una puntuación mínima para ser relevante.
-    return bestMatch.score > 1 ? bestMatch.content : null;
+        console.log(`Biblioteca creada con éxito. Contiene ${knowledgeBase.length} párrafos indexados.`);
+    } catch (error) {
+        console.error("Error crítico al construir la biblioteca de conocimientos:", error);
+    }
 }
 
-
-// --- PASO 4: JUNTAR TODO EN EL MANEJADOR PRINCIPAL ---
-export async function handler(event) {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
-  }
-
-  try {
-    const { message } = JSON.parse(event.body);
-
-    // 1. Buscar contexto relevante en nuestra biblioteca
-    const relevantContext = searchKnowledgeBase(message);
-
-    // 2. Crear el prompt para Gemini.
-    // Le damos instrucciones claras: usa el contexto que encontramos para responder.
-    let augmentedPrompt = `
-      Eres un asistente experto en sistemas SCADA y automatización industrial.
-      Responde la pregunta del usuario de forma clara y concisa.
-    `;
-
-    if (relevantContext) {
-        // Si encontramos contexto, lo añadimos al prompt.
-        augmentedPrompt = `
-          Usa el siguiente CONTEXTO para responder la PREGUNTA DEL USUARIO.
-          Si la respuesta no está en el contexto, indica que no tienes esa información específica,
-          pero puedes responder con tu conocimiento general.
-
-          ---
-          CONTEXTO:
-          ${relevantContext}
-          ---
-        `;
+// --- FUNCIÓN DE BÚSQUEDA INTELIGENTE ---
+async function searchKnowledgeBase(query) {
+    if (knowledgeBase.length === 0) {
+        console.log("La biblioteca está vacía. No se puede buscar.");
+        return [];
     }
     
-    // Añadimos la pregunta del usuario al final del prompt
-    augmentedPrompt += `
-      PREGUNTA DEL USUARIO:
-      ${message}
-    `;
+    // 1. Creamos una "coordenada" para la pregunta del usuario
+    const queryEmbeddingResult = await embeddingModel.embedContent(
+        { content: { parts: [{ text: query }] }, taskType: TaskType.RETRIEVAL_QUERY }
+    );
+    const queryEmbedding = queryEmbeddingResult.embedding.values;
 
-    // 3. Llamar a la API de Gemini con el prompt mejorado
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-    const result = await model.generateContent(augmentedPrompt);
-    const response = await result.response;
-    const text = response.text();
+    // 2. Calculamos la similitud entre la pregunta y cada párrafo de la biblioteca
+    const similarities = knowledgeBase.map(item => ({
+        text: item.text,
+        similarity: calculateCosineSimilarity(queryEmbedding, item.embedding)
+    }));
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ reply: text }),
-    };
+    // 3. Ordenamos los resultados para obtener los más relevantes
+    similarities.sort((a, b) => b.similarity - a.similarity);
 
-  } catch (error) {
-    console.error("Error en la función del handler:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "No se pudo obtener una respuesta del asistente." }),
-    };
-  }
+    // 4. Devolvemos los 3 párrafos más relevantes
+    return similarities.slice(0, 3).map(item => item.text);
 }
 
+// --- MANEJADOR PRINCIPAL DE LA FUNCIÓN ---
+export async function handler(event) {
+    // Nos aseguramos de que la biblioteca esté lista antes de continuar.
+    await setupKnowledgeBase();
+
+    if (event.httpMethod !== "POST") {
+        return { statusCode: 405, body: "Method Not Allowed" };
+    }
+
+    try {
+        const { message } = JSON.parse(event.body);
+
+        // 1. Buscar el contexto más relevante usando la búsqueda inteligente
+        const relevantContexts = await searchKnowledgeBase(message);
+        
+        // 2. Construimos el prompt para Gemini
+        const contextString = relevantContexts.join("\n\n---\n\n");
+        const prompt = `
+            Eres un asistente experto en sistemas SCADA y normativas eléctricas.
+            Usando el siguiente CONTEXTO, responde la PREGUNTA DEL USUARIO de forma clara y concisa.
+            Si la respuesta no se encuentra en el CONTEXTO, indica amablemente que no tienes información sobre ese tema específico en tus documentos.
+            No inventes información.
+
+            ---
+            CONTEXTO:
+            ${contextString}
+            ---
+
+            PREGUNTA DEL USUARIO:
+            ${message}
+        `;
+
+        // 3. Generar la respuesta
+        const result = await generativeModel.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ reply: text }),
+        };
+
+    } catch (error) {
+        console.error("Error en la función del handler:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "No se pudo obtener una respuesta del asistente." }),
+        };
+    }
+}
