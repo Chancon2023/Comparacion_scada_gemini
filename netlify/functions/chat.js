@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // --- CONFIGURACIÓN INICIAL ---
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const generativeModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" }); // Modelo corregido y actualizado
+const generativeModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // Modelo corregido y actualizado
 
 // --- FUNCIÓN DE BÚSQUEDA EN INTERNET ---
 // Se conecta a la API de Google Search para obtener resultados en tiempo real.
@@ -92,6 +92,7 @@ export async function handler(event) {
         };
     }
 }
+
 
 
 
