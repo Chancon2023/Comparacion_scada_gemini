@@ -2,55 +2,96 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Accede a tu API key desde las variables de entorno de Netlify
+// --- CONFIGURACIÓN INICIAL ---
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const generativeModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" }); // Modelo corregido y actualizado
 
-export async function handler(event) {
-  // Solo permitir peticiones POST
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
-  }
-
-  try {
-    const { message } = JSON.parse(event.body);
-
-    // Usa el modelo gemini-pro para chat
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+// --- FUNCIÓN DE BÚSQUEDA EN INTERNET ---
+// Se conecta a la API de Google Search para obtener resultados en tiempo real.
+async function performInternetSearch(query) {
+    console.log(`Iniciando búsqueda en internet para: "${query}"`);
     
-    // Un poco de contexto para que yo sepa de qué hablar
-    const chatContext = `
-      Eres un asistente experto en sistemas SCADA. Tu conocimiento se basa en la 
-      información de una aplicación web que compara 7 plataformas: 
-      Zenon COPADATA, ZEE600 ABB, MicroScada X, EcoStruxure ADMS, 
-      Siemens Spectrum Power, EPAS Gateway y Power Operation.
-      Responde las preguntas de los usuarios de forma concisa y amigable, 
-      basándote en los datos que tienes de esas plataformas.
-    `;
+    // Accede a las claves desde las variables de entorno de Netlify
+    const API_KEY = process.env.GOOGLE_SEARCH_API_KEY;
+    const SEARCH_ID = process.env.SEARCH_ENGINE_ID;
 
-    const chat = model.startChat({
-        history: [{ role: "user", parts: [{ text: chatContext }] },
-                  { role: "model", parts: [{ text: "Entendido. Soy un asistente experto en SCADA. ¿En qué puedo ayudarte?" }] }]
-    });
+    // Si faltan las claves, la función no puede continuar.
+    if (!API_KEY || !SEARCH_ID) {
+        console.error("Faltan las variables de entorno para la búsqueda en Google.");
+        return "Error de configuración: Faltan las claves de la API de búsqueda.";
+    }
 
-    const result = await chat.sendMessage(message);
-    const response = await result.response;
-    const text = response.text();
+    const url = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${SEARCH_ID}&q=${encodeURIComponent(query)}`;
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ reply: text }),
-    };
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            console.error("Error en la respuesta de la API de Google Search:", await response.text());
+            return "Hubo un error al intentar buscar en internet.";
+        }
+        const data = await response.json();
 
-  } catch (error) {
-    console.error("Error al llamar la API de Gemini:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "No se pudo obtener una respuesta del asistente." }),
-    };
-  }
+        // Si no hay resultados, devuelve un mensaje claro.
+        if (!data.items || data.items.length === 0) {
+            return "No se encontraron resultados relevantes en internet.";
+        }
+        
+        // Formateamos los resúmenes (snippets) de los primeros 4 resultados para usarlos como contexto.
+        const snippets = data.items.slice(0, 4).map(item => `- ${item.snippet}`).join("\n");
+        console.log("Contexto encontrado en internet:", snippets);
+        return snippets;
+
+    } catch (error) {
+        console.error("Error fatal al realizar la búsqueda en internet:", error);
+        return "No se pudo completar la búsqueda en internet debido a un error.";
+    }
 }
 
+// --- MANEJADOR PRINCIPAL DE LA FUNCIÓN ---
+export async function handler(event) {
+    if (event.httpMethod !== "POST") {
+        return { statusCode: 405, body: "Method Not Allowed" };
+    }
 
+    try {
+        const { message } = JSON.parse(event.body);
+
+        // 1. Obtener contexto relevante buscando la pregunta del usuario en internet.
+        const internetContext = await performInternetSearch(message);
+
+        // 2. Construir el prompt para Gemini, incluyendo el contexto de internet.
+        const prompt = `
+            Eres un asistente de inteligencia artificial útil y conciso.
+            Basándote EXCLUSIVAMENTE en el siguiente CONTEXTO obtenido de una búsqueda en internet, responde la PREGUNTA DEL USUARIO.
+            Resume la información de manera clara y directa. Si el contexto no es suficiente para responder, indícalo amablemente.
+
+            ---
+            CONTEXTO:
+            ${internetContext}
+            ---
+
+            PREGUNTA DEL USUARIO:
+            ${message}
+        `;
+
+        // 3. Generar la respuesta usando el modelo de Gemini.
+        const result = await generativeModel.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ reply: text }),
+        };
+
+    } catch (error) {
+        console.error("Error en el handler de la función:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "No se pudo obtener una respuesta del asistente." }),
+        };
+    }
+}
 
 
 
