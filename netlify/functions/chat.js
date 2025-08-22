@@ -15,7 +15,7 @@ export async function handler(event) {
     const { message } = JSON.parse(event.body);
 
     // Usa el modelo gemini-pro para chat
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
     
     // Un poco de contexto para que yo sepa de qué hablar
     const chatContext = `
@@ -49,4 +49,5 @@ export async function handler(event) {
     };
   }
 }
+
 
