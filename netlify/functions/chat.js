@@ -19,12 +19,12 @@ export async function handler(event) {
     
     // Un poco de contexto para que yo sepa de qué hablar
     const chatContext = `
-      Eres un asistente experto en sistemas SCADA. Tu conocimiento se basa en la 
-      información de una aplicación web que compara 7 plataformas: 
-      Zenon COPADATA, ZEE600 ABB, MicroScada X, EcoStruxure ADMS, 
-      Siemens Spectrum Power, EPAS Gateway y Power Operation.
-      Responde las preguntas de los usuarios de forma concisa y amigable, 
-      basándote en los datos que tienes de esas plataformas.
+      Eres un asistente experto en sistemas SCADA. Tu conocimiento se basa en la
+  información de una aplicación web que compara 8 plataformas:
+  Zenon COPADATA, ZEE600 ABB, MicroScada X, EcoStruxure ADMS,
+  Siemens Spectrum Power, EPAS Gateway, Power Operation y iFIX GE Vernova.
+  Responde las preguntas de los usuarios de forma concisa y amigable,
+  basándote en los datos que tienes de esas plataformas.
     `;
 
     const chat = model.startChat({
@@ -49,6 +49,7 @@ export async function handler(event) {
     };
   }
 }
+
 
 
 
