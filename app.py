@@ -47,6 +47,11 @@ Resumen de Análisis de Plataformas SCADA:
 7.  **EPAS Gateway Schneider:**
     * Fortalezas: Excelente como concentrador de protocolos.
     * Debilidades: No es un SCADA completo, es un gateway. Carece de funciones de control y HMI avanzadas. No soporta HSR/PRP.
+
+8.  **iFIX GE Vernova:**
+    * Fortalezas: Arquitectura cliente/servidor distribuida con failover y redundancia SCADA, entorno de configuración web centralizado con orientación a objetos:contentReference[oaicite:12]{index=12}, clientes HTML5 mediante Proficy Webspace y Operations Hub:contentReference[oaicite:13]{index=13} e integración nativa con Proficy Historian:contentReference[oaicite:14]{index=14}.
+    * Debilidades: No soporta IEC 61850 ni PRP/HSR de forma nativa; la conectividad depende de drivers OPC/IGS; no dispone de módulos específicos para minería; ICCP/TASE 2 no es nativo.
+
 """
 
 # --- FUNCIÓN DE IA MEJORADA ---
