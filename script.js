@@ -134,6 +134,84 @@ document.addEventListener('DOMContentLoaded', function () {
                 tiempoImplementacion: { score: 2, compliance: 'No Cumple', detail: 'Largo, por dificultades en configuración.' }
             }
         }
+        {
+    id: 'ifix',
+    name: 'iFIX GE Vernova',
+    logo_text: 'iFIX',
+    color: '#8A2BE2',
+    summary: 'HMI/SCADA con arquitectura cliente/servidor distribuida y entorno de configuración web centralizado. Soporta HTML5 nativo, objetos orientados a modelos y failover geoseparado. Su enfoque principal son las industrias de procesos, no la minería.',
+    pros: [
+        'Arquitectura cliente/servidor flexible con redundancia SCADA y failover mejorado.',
+        'Configuración web centralizada con orientación a objetos y plantillas de alto rendimiento:contentReference[oaicite:0]{index=0}.',
+        'Interfaces HTML5 mediante Proficy Webspace y Operations Hub para acceso desde cualquier dispositivo:contentReference[oaicite:1]{index=1}.',
+        'Compatibilidad con más de 100 protocolos mediante IGS/OPC UA (incluye drivers IEC 61850, IEC 60870‑5‑104, DNP3, Modbus, MQTT).',
+        'Integración nativa con Proficy Historian para registro y análisis de datos en tiempo real:contentReference[oaicite:2]{index=2}.'
+    ],
+    cons: [
+        'No tiene IEC 61850 ni PRP/HSR nativos; requiere drivers premium y la disponibilidad PRP depende de la infraestructura de red.',
+        'No cuenta con ICCP/TASE 2 nativo; la integración se realiza mediante OPC/terceros.',
+        'No existen módulos específicos para minería; se orienta a plantas de proceso generales.',
+        'Costo adicional por licenciamiento de drivers y dependencia de IGS/Kepware.'
+    ],
+    scores: {
+        arquitectura: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'Arquitectura cliente/servidor distribuida con failover primario/secundario y web HMI.'
+        },
+        redundancia: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'Redundancia SCADA y Enhanced Failover; PRP depende de la infraestructura.'
+        },
+        escalabilidad: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'Escalable desde sistemas locales a soluciones de planta completa; admite clientes remotos via HTML5.'
+        },
+        ciberseguridad: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'Diseño seguro con OPC UA, certificados digitales y control de accesos:contentReference[oaicite:3]{index=3}.'
+        },
+        normaNTSyCS: {
+            score: 3,
+            compliance: 'Cumple',
+            detail: 'Cumple requisitos básicos; la ausencia de protocolos nativos IEC 61850/PRP limita el alineamiento completo.'
+        },
+        interfaz: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'Interfaz HTML5 y cliente ligero mediante Proficy Webspace y Operations Hub:contentReference[oaicite:4]{index=4}.'
+        },
+        adaptacionMineria: {
+            score: 2,
+            compliance: 'No Cumple',
+            detail: 'No dispone de funciones específicas para minería; orientado a industrias de proceso.'
+        },
+        integracionSubs: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'Amplio set de protocolos mediante IGS/OPC UA (IEC 61850, DNP3, Modbus, MQTT, etc.).'
+        },
+        funcionalidadesNativas: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'Objetos orientados a modelos, plantillas predefinidas y biblioteca de HMI de alto rendimiento:contentReference[oaicite:5]{index=5}.'
+        },
+        tco: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'TCO medio-bajo gracias a configuración centralizada y reutilización de plantillas:contentReference[oaicite:6]{index=6}.'
+        },
+        tiempoImplementacion: {
+            score: 4,
+            compliance: 'Cumple',
+            detail: 'Despliegue rápido por configuración web y plantillas; requiere drivers adicionales.'
+        }
+    }
+}
+
     ];
     const features = {
         arquitectura: 'Arquitectura', redundancia: 'Redundancia', escalabilidad: 'Escalabilidad', ciberseguridad: 'Ciberseguridad', normaNTSyCS: 'Cumplimiento Norma NTSyCS',
@@ -488,3 +566,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     initialize();
 });
+
