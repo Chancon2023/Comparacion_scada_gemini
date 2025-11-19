@@ -627,3 +627,51 @@ body {
         right: 1rem;
     }
 }
+
+/* Additional adjustments for very small screens (phones) */
+@media (max-width: 480px) {
+    /* Reduce overall font size */
+    body {
+        font-size: 0.9rem;
+    }
+    .page-header h1 {
+        font-size: 1.6rem;
+    }
+    .page-header p {
+        font-size: 1rem;
+    }
+    /* Compact navigation items */
+    .sidebar .nav-link {
+        font-size: 0.8rem;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+    .nav-icon {
+        font-size: 0.9rem;
+    }
+    /* Matrix table cells smaller */
+    #comparison-matrix th,
+    #comparison-matrix td {
+        min-width: 200px;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    .filter-controls {
+        gap: 0.5rem;
+    }
+    /* Chat button spacing */
+    .chat-open-btn {
+        bottom: 1rem;
+        right: 1rem;
+    }
+    /* Increase spacing for details panel */
+    .features-sidebar h3 {
+        font-size: 1.2rem;
+    }
+    .features-sidebar h4 {
+        font-size: 1rem;
+    }
+    .features-sidebar p {
+        font-size: 0.9rem;
+    }
+}
