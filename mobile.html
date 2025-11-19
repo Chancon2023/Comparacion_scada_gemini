@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación SCADA — Versión Móvil</title>
+    <!-- Enlace a la hoja de estilos específica para móviles -->
+    <link rel="stylesheet" href="mobile.css">
+    <!-- Librerías para gráficos y exportación a PDF -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Página de la Matriz Comparativa -->
+            <div id="inicio" class="page active">
+                <header class="page-header">
+                    <h1>Matriz de Evaluación Técnica</h1>
+                    <p>Filtre sistemas y seleccione criterios para un análisis granular.</p>
+                </header>
+                <div class="filter-controls" id="scada-filter-container"></div>
+                <div class="matrix-container">
+                    <div class="matrix-table-wrapper">
+                        <table id="comparison-matrix"></table>
+                    </div>
+                    <div class="features-sidebar" id="features-sidebar">
+                        <h3><span class="accent">//</span> Detalles del Criterio</h3>
+                        <div id="features-content"><p>Seleccione una fila para visualizar detalles.</p></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Página de Análisis Detallado -->
+            <div id="analisis" class="page">
+                <header class="page-header">
+                    <h1>Análisis de Perfil Técnico</h1>
+                    <p>Seleccione plataformas y criterios para visualizar la comparativa de rendimiento.</p>
+                </header>
+                <div class="analisis-main-grid">
+                    <div class="analisis-controls-wrapper">
+                        <h3><span class="accent">//</span> Parámetros de Visualización</h3>
+                        <div class="control-group">
+                            <label>Seleccionar Plataformas (máx. 3):</label>
+                            <div class="pills-container" id="platform-selector-pills"></div>
+                        </div>
+                        <div class="control-group">
+                            <label>Seleccionar Criterios de Evaluación:</label>
+                            <div class="pills-container criteria-pills" id="criteria-selector-pills"></div>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper radar-wrapper">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
+                    <div class="ficha-tecnica" id="ficha-tecnica"></div>
+                </div>
+            </div>
+
+            <!-- Página de Clasificación y Conclusión -->
+            <div id="ranking" class="page">
+                <header class="page-header">
+                    <h1>Clasificación y Conclusión Ejecutiva</h1>
+                    <p>Resultados finales basados en la puntuación ponderada de los criterios evaluados.</p>
+                </header>
+                <div id="ranking-export-container">
+                    <div class="ranking-layout">
+                        <div class="ranked-list-container">
+                             <h3><span class="accent">//</span> Clasificación por Rendimiento</h3>
+                            <div id="ranked-list"></div>
+                        </div>
+                        <div class="conclusion-container">
+                            <h3><span class="accent">//</span> Conclusión Ejecutiva</h3>
+                            <p>El análisis cuantitativo derivado de 11 criterios técnicos posiciona a <strong>Zenon COPADATA</strong> como la plataforma con el rendimiento más alto y equilibrado entre las soluciones evaluadas. Destaca por su arquitectura distribuida, alta fiabilidad en mecanismos de redundancia (PRP/HSR) y una escalabilidad probada en entornos industriales. Estos atributos, combinados con un costo total de propiedad competitivo, minimizan los riesgos de implementación y aseguran la continuidad operacional.</p>
+                            <p>En contraste, <strong>Power Operation Schneider</strong> presenta deficiencias significativas en fiabilidad y usabilidad. Se han reportado fallas críticas en la redundancia y una inestabilidad asociada a la generación excesiva de logs. Su dependencia de herramientas obsoletas y la limitada funcionalidad HMI lo convierten en una opción de alto riesgo para aplicaciones críticas.</p>
+                            <h4>Recomendación Final:</h4>
+                            <p>De acuerdo con los criterios evaluados, se recomienda la adopción de <strong>Zenon COPADATA</strong> como plataforma estándar para nuevos proyectos, por su equilibrio entre fiabilidad, escalabilidad y costo. <strong>Power Operation Schneider</strong> solo debería considerarse en escenarios muy específicos donde sus limitaciones no comprometan la operación.</p>
+                        </div>
+                    </div>
+                </div>
+                <button id="export-pdf-btn" class="cta-button">Exportar Conclusión a PDF</button>
+            </div>
+        </main>
+        
+        <!-- Barra de navegación inferior -->
+        <nav class="mobile-nav">
+            <a href="#inicio" class="nav-link active" data-page="inicio"><span class="nav-icon">📊</span><span class="nav-text">Matriz</span></a>
+            <a href="#analisis" class="nav-link" data-page="analisis"><span class="nav-icon">📈</span><span class="nav-text">Análisis</span></a>
+            <a href="#ranking" class="nav-link" data-page="ranking"><span class="nav-icon">🏆</span><span class="nav-text">Ranking</span></a>
+        </nav>
+    </div>
+
+    <!-- Chatbot flotante -->
+    <div class="chatbot-container">
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <h3>Asistente SCADA</h3>
+                <button class="chat-close-btn" id="chat-close-btn">&times;</button>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="chat-message bot">Hola, soy su asistente especialista en SCADA. ¿En qué puedo asistirle?</div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="chat-input" placeholder="Escriba su consulta...">
+                <button id="chat-send-btn">Enviar</button>
+            </div>
+        </div>
+        <button class="chat-open-btn" id="chat-open-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9.4 12.4l-1.4-1.4-1.4 1.4-1.2-1.2 1.4-1.4-1.4-1.4 1.2-1.2 1.4 1.4 1.4-1.4 1.2 1.2-1.4 1.4 1.4 1.4zm6 0l-1.4-1.4-1.4 1.4-1.2-1.2 1.4-1.4-1.4-1.4 1.2-1.2 1.4 1.4 1.4-1.4 1.2 1.2-1.4 1.4 1.4 1.4z"></path></svg>
+        </button>
+    </div>
+
+    <!-- Script principal de la aplicación (comparte la misma lógica que la versión de escritorio) -->
+    <script src="script.js"></script>
+</body>
+</html>
